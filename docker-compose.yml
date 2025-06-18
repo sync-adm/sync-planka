@@ -14,8 +14,8 @@ services:
     ports:
       - 3000:1337
     environment:
-      - BASE_URL=http://localhost:3000
-      - DATABASE_URL=postgresql://postgres@postgres/planka
+      - BASE_URL=${BASE_URL:-http://localhost:3000}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres@postgres/planka}
 
       # Optionally store the database password in secrets:
       # - DATABASE_URL=postgresql://postgres:$${DATABASE_PASSWORD}@postgres/planka
@@ -24,7 +24,7 @@ services:
       # secrets:
       #   - database_password
 
-      - SECRET_KEY=notsecretkey
+      - SECRET_KEY=${SECRET_KEY:-notsecretkey}
       # Optionally store in secrets - then SECRET_KEY should not be set
       # - SECRET_KEY__FILE=/run/secrets/secret_key
 
@@ -45,12 +45,12 @@ services:
       # - DEFAULT_LANGUAGE=en-US
 
       # Do not comment out DEFAULT_ADMIN_EMAIL if you want to prevent this user from being edited/deleted
-      # - DEFAULT_ADMIN_EMAIL=demo@demo.demo
-      # - DEFAULT_ADMIN_PASSWORD=demo
+      - DEFAULT_ADMIN_EMAIL=${ADMIN_EMAIL} # Do not remove if you want to prevent this user from being edited/deleted
+      - DEFAULT_ADMIN_PASSWORD=${ADMIN_PASSWORD}
       # Optionally store in secrets - then DEFAULT_ADMIN_PASSWORD should not be set
       # - DEFAULT_ADMIN_PASSWORD__FILE=/run/secrets/default_admin_password
-      # - DEFAULT_ADMIN_NAME=Demo Demo
-      # - DEFAULT_ADMIN_USERNAME=demo
+      - DEFAULT_ADMIN_NAME=${ADMIN_NAME}
+      - DEFAULT_ADMIN_USERNAME=${ADMIN_USERNAME}
 
       # - ACTIVE_USERS_LIMIT=
 
@@ -58,14 +58,14 @@ services:
       # It should not be enabled without a rate limiter for security reasons.
       # - SHOW_DETAILED_AUTH_ERRORS=false
 
-      # - S3_ENDPOINT=
-      # - S3_REGION=
-      # - S3_ACCESS_KEY_ID=
-      # - S3_SECRET_ACCESS_KEY=
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - S3_REGION=${S3_REGION}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
       # Optionally store in secrets - then S3_SECRET_ACCESS_KEY should not be set
       # - S3_SECRET_ACCESS_KEY__FILE=/run/secrets/s3_secret_access_key
-      # - S3_BUCKET=
-      # - S3_FORCE_PATH_STYLE=true
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
 
       # - OIDC_ISSUER=
       # - OIDC_CLIENT_ID=
@@ -88,25 +88,25 @@ services:
       # - OIDC_ENFORCED=true
 
       # Email Notifications (https://nodemailer.com/smtp/)
-      # - SMTP_HOST=
-      # - SMTP_PORT=587
-      # - SMTP_NAME=
-      # - SMTP_SECURE=true
-      # - SMTP_USER=
-      # - SMTP_PASSWORD=
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_NAME=${SMTP_NAME}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
       # Optionally store in secrets - then SMTP_PASSWORD should not be set
       # - SMTP_PASSWORD__FILE=/run/secrets/smtp_password
-      # - SMTP_FROM="Demo Demo" <demo@demo.demo>
-      # - SMTP_TLS_REJECT_UNAUTHORIZED=false
+      - SMTP_FROM=${SMTP_FROM}
+      - SMTP_TLS_REJECT_UNAUTHORIZED=${SMTP_TLS_REJECT_UNAUTHORIZED}
 
-      # Optional fields: accessToken, events, excludedEvents
-      # - |
-      #   WEBHOOKS=[{
-      #     "url": "http://localhost:3001",
-      #     "accessToken": "notaccesstoken",
-      #     "events": ["cardCreate", "cardUpdate", "cardDelete"],
-      #     "excludedEvents": ["notificationCreate", "notificationUpdate"]
-      #   }]
+    # Optional fields: accessToken, events, excludedEvents
+    # - |
+    #   WEBHOOKS=[{
+    #     "url": "http://localhost:3001",
+    #     "accessToken": "notaccesstoken",
+    #     "events": ["cardCreate", "cardUpdate", "cardDelete"],
+    #     "excludedEvents": ["notificationCreate", "notificationUpdate"]
+    #   }]
     depends_on:
       postgres:
         condition: service_healthy
