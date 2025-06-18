@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 const ADMINISTRATION = 'ADMINISTRATION';
 const USER_SETTINGS = 'USER_SETTINGS';
 const ADD_PROJECT = 'ADD_PROJECT';

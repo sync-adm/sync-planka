@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 import isEmail from 'validator/lib/isEmail';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
@@ -170,7 +165,7 @@ const Content = React.memo(() => {
       <Grid verticalAlign="middle" className={classNames(styles.grid, styles.fullHeight)}>
         <Grid.Column computer={6} tablet={16} mobile={16}>
           <div className={styles.loginWrapper}>
-            <Header as="h1" textAlign="center" content="PLANKA" className={styles.formTitle} />
+            <Header as="h1" textAlign="center" content="SYNC" className={styles.formTitle} />
             <Header
               as="h2"
               textAlign="center"
@@ -250,8 +245,8 @@ const Content = React.memo(() => {
             <p className={styles.formFooter}>
               <Trans i18nKey="common.poweredByPlanka">
                 {'Powered by '}
-                <a href="https://github.com/plankanban/planka" target="_blank" rel="noreferrer">
-                  PLANKA
+                <a href="https://sync.com.br" target="_blank" rel="noreferrer">
+                  Sync
                 </a>
               </Trans>
             </p>

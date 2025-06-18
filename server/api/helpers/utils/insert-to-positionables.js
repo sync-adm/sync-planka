@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 const GAP = 2 ** 14;
 const MIN_GAP = 0.125;
 const MAX_POSITION = 2 ** 50;

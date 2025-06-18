@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
@@ -23,6 +18,8 @@ import '@gravity-ui/uikit/styles/styles.css';
 import '../../lib/custom-ui/styles.css';
 
 import '../../styles.module.scss';
+import Marketing from './Marketing';
+import Design from './Design';
 
 function Root({ store, history }) {
   return (
@@ -37,6 +34,8 @@ function Root({ store, history }) {
               <Route path={Paths.PROJECTS} element={<Core />} />
               <Route path={Paths.BOARDS} element={<Core />} />
               <Route path={Paths.CARDS} element={<Core />} />
+              <Route path={Paths.MARKETING} element={<Marketing />} />
+              <Route path={Paths.DESIGN} element={<Design />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ToasterProvider>

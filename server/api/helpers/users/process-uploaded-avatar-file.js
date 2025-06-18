@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 const { rimraf } = require('rimraf');
 const mime = require('mime');
 const { v4: uuid } = require('uuid');
