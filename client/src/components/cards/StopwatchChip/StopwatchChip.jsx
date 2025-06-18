@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 import upperFirst from 'lodash/upperFirst';
 import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';

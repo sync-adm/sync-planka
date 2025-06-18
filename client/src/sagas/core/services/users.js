@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 import { call, put, select } from 'redux-saga/effects';
 
 import { changeCoreLanguage, logout } from './core';

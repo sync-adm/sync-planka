@@ -20,7 +20,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'Om PLANKA',
+      aboutPlanka: 'Om SYNC',
       account: 'Konto',
       actions: 'Handlinger',
       activateUser_title: 'Aktiv bruger',
@@ -232,7 +232,7 @@ export default {
       others: 'Andre',
       phone: 'Telefon',
       plankaUsesAppriseToSendNotificationsToOver100PopularServices:
-        'PLANKA bruger <1><0>Apprise</0></1> til at sende notifikationer til over 100 populære tjenester.',
+        'SYNC bruger <1><0>Apprise</0></1> til at sende notifikationer til over 100 populære tjenester.',
       preferences: 'Præferencer',
       pressPasteShortcutToAddAttachmentFromClipboard:
         'Tip: Tryk Ctrl-V (Cmd-V på Mac) for at vedhæfte direkte fra udklipsholder.',

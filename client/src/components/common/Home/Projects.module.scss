@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 :global(#app) {
   .addButton {
     background: transparent;
@@ -56,12 +51,16 @@
   }
 
   .card {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 3px 6px rgba(0, 0, 0, 0.1),
+      0 6px 12px rgba(0, 0, 0, 0.1);
     height: 150px;
     transition: box-shadow 0.2s ease;
 
     &:hover {
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1), 0 32px 64px rgba(0, 0, 0, 0.1);
+      box-shadow:
+        0 16px 32px rgba(0, 0, 0, 0.1),
+        0 32px 64px rgba(0, 0, 0, 0.1);
     }
   }
 

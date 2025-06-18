@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 const defaultFind = (criteria, { sort = 'id' } = {}) => List.find(criteria).sort(sort);
 
 /* Query methods */

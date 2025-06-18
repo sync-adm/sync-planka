@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 /**
  * The IP address of the client that just made a request to this application, whether
  * or not the TRUST_PROXY env variable is true and if endpoint accessed through a proxy.

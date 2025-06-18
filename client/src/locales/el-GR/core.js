@@ -20,7 +20,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'Σχετικά με το PLANKA',
+      aboutPlanka: 'Σχετικά με το SYNC',
       account: 'Λογαριασμός',
       actions: 'Ενέργειες',
       activateUser_title: 'Ενεργοποίηση χρήστη',
@@ -242,7 +242,7 @@ export default {
       others: 'Άλλοι',
       phone: 'Τηλέφωνο',
       plankaUsesAppriseToSendNotificationsToOver100PopularServices:
-        'Το PLANKA χρησιμοποιεί το <1><0>Apprise</0></1> για να στέλνει ειδοποιήσεις σε πάνω από 100 δημοφιλείς υπηρεσίες.',
+        'Το SYNC χρησιμοποιεί το <1><0>Apprise</0></1> για να στέλνει ειδοποιήσεις σε πάνω από 100 δημοφιλείς υπηρεσίες.',
       preferences: 'Προτιμήσεις',
       pressPasteShortcutToAddAttachmentFromClipboard:
         'Συμβουλή: πατήστε Ctrl-V (Cmd-V σε Mac) για να προσθέσετε συνημμένο από το πρόχειρο.',

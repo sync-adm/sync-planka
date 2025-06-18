@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 const SERVER_BASE_URL =
   import.meta.env.VITE_SERVER_BASE_URL || (import.meta.env.DEV ? 'http://localhost:1337' : '');
 
