@@ -22,6 +22,8 @@ import comments from './comments';
 import activities from './activities';
 import notifications from './notifications';
 import notificationServices from './notification-services';
+import marketingWatchers from './marketing';
+import designWatchers from './design';
 
 export default [
   router,
@@ -48,4 +50,6 @@ export default [
   activities,
   notifications,
   notificationServices,
+  marketingWatchers,
+  designWatchers,
 ];

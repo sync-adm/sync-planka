@@ -22,6 +22,8 @@ import comments from './comments';
 import activities from './activities';
 import notifications from './notifications';
 import notificationServices from './notification-services';
+import marketing from './marketing';
+import design from './design';
 
 export default {
   ...socket,
@@ -48,4 +50,6 @@ export default {
   ...activities,
   ...notifications,
   ...notificationServices,
+  ...marketing,
+  ...design,
 };

@@ -7,6 +7,8 @@ import common from './common';
 import auth from './auth';
 import core from './core';
 import ui from './ui';
+import marketing from './marketing';
+import design from './design';
 
 export default combineReducers({
   router,
@@ -16,4 +18,6 @@ export default combineReducers({
   auth,
   core,
   ui,
+  marketing,
+  design,
 });

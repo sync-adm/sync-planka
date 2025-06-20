@@ -12,7 +12,6 @@ const http = {};
 
         return result;
       }, new FormData());
-
     return fetch(`${Config.SERVER_BASE_URL}/api${url}`, {
       method,
       headers,
