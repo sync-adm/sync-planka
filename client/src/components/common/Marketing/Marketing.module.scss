@@ -2,7 +2,14 @@
   margin-top: 10rem;
   padding: 10px 1.5rem;
 
-  p {
+  h1 {
     color: white;
+  }
+
+  .pagination_container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
   }
 }

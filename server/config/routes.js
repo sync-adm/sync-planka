@@ -177,6 +177,10 @@ module.exports.routes = {
   'POST /api/notification-services/:id/test': 'notification-services/test',
   'DELETE /api/notification-services/:id': 'notification-services/delete',
 
+  'GET /api/marketing/completed-requests': 'marketing/show',
+
+  'GET /api/design/new-requests': 'design/show',
+
   'GET /preloaded-favicons/*': {
     fn: staticDirServer('/preloaded-favicons', () =>
       path.join(

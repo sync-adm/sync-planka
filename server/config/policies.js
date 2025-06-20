@@ -26,4 +26,7 @@ module.exports.policies = {
   'config/show': true,
   'access-tokens/create': true,
   'access-tokens/exchange-with-oidc': true,
+
+  'marketing/*': ['is-authenticated', 'is-admin'],
+  'design/*': ['is-authenticated', 'is-admin'],
 };
