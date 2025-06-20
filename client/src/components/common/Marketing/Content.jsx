@@ -7,6 +7,7 @@ import styles from './Marketing.module.scss';
 import Fixed from '../Fixed';
 import entryActions from '../../../entry-actions';
 import selectors from '../../../selectors';
+import { getElapsedTime } from '../../../utils/parse-time';
 
 const Content = React.memo(() => {
   const dispatch = useDispatch();
@@ -42,23 +43,42 @@ const Content = React.memo(() => {
           <>
             <Table celled>
               <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Nome</Table.HeaderCell>
-                  <Table.HeaderCell>Quadro</Table.HeaderCell>
-                  <Table.HeaderCell>Projeto</Table.HeaderCell>
-                  <Table.HeaderCell>Data de Criação</Table.HeaderCell>
+                <Table.Row className={styles.tableHeader}>
+                  <Table.HeaderCell>Cliente</Table.HeaderCell>
+                  <Table.HeaderCell>Solicitante</Table.HeaderCell>
+                  <Table.HeaderCell className={styles.dateColumn}>
+                    Data da Solicitação
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className={styles.waitTimeColumn}>
+                    Tempo em Espera
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className={styles.requestColumn}>Solicitação</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {cards &&
-                  cards.map((card) => (
-                    <Table.Row key={card.id}>
-                      <Table.Cell>{card.name}</Table.Cell>
-                      <Table.Cell>{card.list?.board?.name}</Table.Cell>
-                      <Table.Cell>{card.list?.board?.project?.name}</Table.Cell>
-                      <Table.Cell>{new Date(card.createdAt).toLocaleDateString()}</Table.Cell>
-                    </Table.Row>
-                  ))}
+                  cards.map((card, index) => {
+                    return (
+                      <Table.Row
+                        key={card.id}
+                        className={index % 2 === 0 ? undefined : styles.isOdd}
+                      >
+                        <Table.Cell>{card.list?.board?.project?.name}</Table.Cell>
+                        <Table.Cell>{card.creatorUser?.name}</Table.Cell>
+                        <Table.Cell className={styles.dateColumn}>
+                          {new Date(card.createdAt).toLocaleDateString('pt-BR')} às{' '}
+                          {new Date(card.createdAt).toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </Table.Cell>
+                        <Table.Cell className={styles.waitTimeColumn}>
+                          {getElapsedTime(new Date(card.createdAt).toLocaleDateString())}
+                        </Table.Cell>
+                        <Table.Cell className={styles.requestColumn}>{card.name}</Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
               </Table.Body>
             </Table>
             <div className={styles.pagination_container}>

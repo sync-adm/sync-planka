@@ -111,14 +111,22 @@ module.exports = {
       projectMap[p.id] = p;
     }
 
-    const formattedCards = cards.map((card) => {
+    const cardPromises = cards.map(async (card) => {
       const list = listMap[card.listId] || {};
       const board = boardMap[list.boardId] || {};
       const project = projectMap[board.projectId] || {};
 
+      let creatorUser = {};
+      const creatorUserId = card.creatorUserId || null;
+
+      if (creatorUserId) {
+        creatorUser = await User.findOne({ id: creatorUserId }).select(['name', 'email']);
+      }
+
       if (includeAllFields) {
         return {
           ...card,
+          creatorUser,
           list: {
             ...list,
             board: {
@@ -138,6 +146,7 @@ module.exports = {
         position: card.position,
         createdAt: card.createdAt,
         updatedAt: card.updatedAt,
+        creatorUser,
 
         list: {
           id: list.id,
@@ -156,6 +165,8 @@ module.exports = {
         },
       };
     });
+
+    const formattedCards = await Promise.all(cardPromises);
 
     return {
       cards: formattedCards,
