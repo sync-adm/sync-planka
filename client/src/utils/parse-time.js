@@ -1,7 +1,6 @@
 import parseDate from 'date-fns/parse';
-import differenceInDays from 'date-fns/differenceInDays';
-import differenceInHours from 'date-fns/differenceInHours';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
+import { isValid, parseISO } from 'date-fns';
 
 const TIME_REGEX =
   /^((\d{1,2})((:|\.)?(\d{1,2}))?)(a|p|(am|a\.m\.|midnight|mi|pm|p\.m\.|noon|n))?$/;
@@ -111,27 +110,20 @@ export default (string, referenceDate) => {
  */
 export const getElapsedTime = (date) => {
   const now = new Date();
-  const targetDate = new Date(date);
+  const target = typeof date === 'string' ? parseISO(date) : date;
 
-  if (Number.isNaN(targetDate.getTime())) {
-    return 'Data inválida';
-  }
+  if (!isValid(target)) return 'Data inválida';
+  if (target > now) return '0m';
 
-  if (targetDate > now) {
-    return '0m';
-  }
-
-  const days = differenceInDays(now, targetDate);
-  const hoursTotal = differenceInHours(now, targetDate);
-  const hours = hoursTotal % 24;
-  const minutesTotal = differenceInMinutes(now, targetDate);
+  const minutesTotal = differenceInMinutes(now, target);
+  const days = Math.floor(minutesTotal / 1440); // 60*24
+  const hours = Math.floor((minutesTotal % 1440) / 60);
   const minutes = minutesTotal % 60;
 
-  let result = '';
+  const parts = [];
+  if (days) parts.push(`${days}d`);
+  if (hours) parts.push(`${hours}h`);
+  parts.push(`${minutes}m`);
 
-  if (days > 0) result += `${days}d `;
-  if (hours > 0 || days > 0) result += `${hours}h `;
-  result += `${minutes}m`;
-
-  return result.trim();
+  return parts.join(' ');
 };
