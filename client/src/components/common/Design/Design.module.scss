@@ -1,6 +1,9 @@
 .container {
   margin-top: 10rem;
   padding: 10px 2rem;
+  height: calc(100vh - 10rem);
+  overflow-y: auto;
+  position: relative;
 
   h1 {
     color: white;
@@ -12,4 +15,49 @@
     margin-top: 2rem;
     padding-bottom: 2rem;
   }
+
+  .tableHeader {
+    background-color: rgb(244, 243, 243);
+    color: black;
+    font-size: 1rem;
+  }
+
+  .isOdd {
+    background-color: rgb(244, 243, 243);
+  }
+
+  .dateColumn {
+    max-width: 80px;
+  }
+
+  .waitTimeColumn {
+    max-width: 80px;
+  }
+
+  .requestColumn {
+    min-width: 250px;
+    width: auto;
+  }
+}
+
+.cardLink {
+  cursor: pointer;
+  color: #2185d0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -1,4 +1,6 @@
 import parseDate from 'date-fns/parse';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import { isValid, parseISO } from 'date-fns';
 
 const TIME_REGEX =
   /^((\d{1,2})((:|\.)?(\d{1,2}))?)(a|p|(am|a\.m\.|midnight|mi|pm|p\.m\.|noon|n))?$/;
@@ -99,4 +101,29 @@ export default (string, referenceDate) => {
   }
 
   return INVALID_DATE;
+};
+
+/**
+ * Calcula o tempo decorrido entre uma data e o momento atual usando date-fns
+ * @param {Date|string} date - Data de referência
+ * @returns {string} Tempo decorrido no formato "2d 4h 32m"
+ */
+export const getElapsedTime = (date) => {
+  const now = new Date();
+  const target = typeof date === 'string' ? parseISO(date) : date;
+
+  if (!isValid(target)) return 'Data inválida';
+  if (target > now) return '0m';
+
+  const minutesTotal = differenceInMinutes(now, target);
+  const days = Math.floor(minutesTotal / 1440); // 60*24
+  const hours = Math.floor((minutesTotal % 1440) / 60);
+  const minutes = minutesTotal % 60;
+
+  const parts = [];
+  if (days) parts.push(`${days}d`);
+  if (hours) parts.push(`${hours}h`);
+  parts.push(`${minutes}m`);
+
+  return parts.join(' ');
 };

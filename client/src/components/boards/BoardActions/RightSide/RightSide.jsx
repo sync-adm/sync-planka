@@ -1,19 +1,18 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
-import { usePopup } from '../../../../lib/popup';
 
 import selectors from '../../../../selectors';
 import entryActions from '../../../../entry-actions';
 import { BoardContexts, BoardViews } from '../../../../constants/Enums';
 import { BoardContextIcons, BoardViewIcons } from '../../../../constants/Icons';
+import { usePopup } from '../../../../lib/popup';
 import ActionsStep from './ActionsStep';
 
 import styles from './RightSide.module.scss';
 
 const RightSide = React.memo(() => {
   const board = useSelector(selectors.selectCurrentBoard);
-
   const dispatch = useDispatch();
 
   const handleSelectViewClick = useCallback(

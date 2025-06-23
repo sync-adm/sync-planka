@@ -21,6 +21,7 @@ import DraggableCard from '../../cards/DraggableCard';
 import AddCard from '../../cards/AddCard';
 import ArchiveCardsStep from '../../cards/ArchiveCardsStep';
 import PlusMathIcon from '../../../assets/images/plus-math-icon.svg?react';
+import RequestArtModal from '../../boards/BoardActions/ArtModal';
 
 import styles from './List.module.scss';
 import globalStyles from '../../../styles.module.scss';
@@ -36,6 +37,7 @@ const List = React.memo(({ id, index }) => {
   const isFavoritesActive = useSelector(selectors.selectIsFavoritesActiveForCurrentUser);
   const list = useSelector((state) => selectListById(state, id));
   const cardIds = useSelector((state) => selectFilteredCardIdsByListId(state, id));
+  const board = useSelector(selectors.selectCurrentBoard);
 
   const { canEdit, canArchiveCards, canAddCard, canDropCard } = useSelector((state) => {
     const isEditModeEnabled = selectors.selectIsEditModeEnabled(state); // TODO: move out?
@@ -55,6 +57,7 @@ const List = React.memo(({ id, index }) => {
   const [t] = useTranslation();
   const [isEditNameOpened, setIsEditNameOpened] = useState(false);
   const [isAddCardOpened, setIsAddCardOpened] = useState(false);
+  const [isRequestArtModalOpen, setRequestArtModalOpen] = useState(false);
 
   const wrapperRef = useRef(null);
   const cardsWrapperRef = useRef(null);
@@ -136,95 +139,118 @@ const List = React.memo(({ id, index }) => {
   );
 
   return (
-    <Draggable
-      draggableId={`list:${id}`}
-      index={index}
-      isDragDisabled={!list.isPersisted || !canEdit || isEditNameOpened}
-    >
-      {({ innerRef, draggableProps, dragHandleProps }) => (
-        <div
-          {...draggableProps} // eslint-disable-line react/jsx-props-no-spreading
-          data-drag-scroller
-          ref={innerRef}
-          className={styles.innerWrapper}
-        >
+    <div>
+      <Draggable
+        draggableId={`list:${id}`}
+        index={index}
+        isDragDisabled={!list.isPersisted || !canEdit || isEditNameOpened}
+      >
+        {({ innerRef, draggableProps, dragHandleProps }) => (
           <div
-            ref={wrapperRef}
-            className={classNames(
-              styles.outerWrapper,
-              isFavoritesActive && styles.outerWrapperWithFavorites,
-            )}
-            onTransitionEnd={handleWrapperTransitionEnd}
+            {...draggableProps} // eslint-disable-line react/jsx-props-no-spreading
+            data-drag-scroller
+            ref={innerRef}
+            className={styles.innerWrapper}
           >
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,
-                                         jsx-a11y/no-static-element-interactions */}
             <div
-              {...dragHandleProps} // eslint-disable-line react/jsx-props-no-spreading
-              className={classNames(styles.header, canEdit && styles.headerEditable)}
-              onClick={handleHeaderClick}
+              ref={wrapperRef}
+              className={classNames(
+                styles.outerWrapper,
+                isFavoritesActive && styles.outerWrapperWithFavorites,
+              )}
+              onTransitionEnd={handleWrapperTransitionEnd}
             >
-              {isEditNameOpened ? (
-                <EditName listId={id} onClose={handleEditNameClose} />
-              ) : (
-                <div className={styles.headerName}>
-                  {list.color && (
-                    <Icon
-                      name="circle"
-                      className={classNames(
-                        styles.headerNameColor,
-                        globalStyles[`color${upperFirst(camelCase(list.color))}`],
-                      )}
-                    />
-                  )}
-                  {list.name}
-                </div>
-              )}
-              {list.type !== ListTypes.ACTIVE && (
-                <Icon
-                  name={ListTypeIcons[list.type]}
-                  className={classNames(
-                    styles.headerIcon,
-                    list.isPersisted && (canEdit || canArchiveCards) && styles.headerIconHidable,
-                  )}
-                />
-              )}
-              {list.isPersisted &&
-                (canEdit ? (
-                  <ActionsPopup listId={id} onNameEdit={handleNameEdit} onCardAdd={handleCardAdd}>
-                    <Button className={styles.headerButton}>
-                      <Icon fitted name="pencil" size="small" />
-                    </Button>
-                  </ActionsPopup>
-                ) : (
-                  canArchiveCards && (
-                    <ArchiveCardsPopup listId={id}>
-                      <Button className={styles.headerButton}>
-                        <Icon fitted name="archive" size="small" />
-                      </Button>
-                    </ArchiveCardsPopup>
-                  )
-                ))}
-            </div>
-            <div ref={cardsWrapperRef} className={styles.cardsInnerWrapper}>
-              <div className={styles.cardsOuterWrapper}>{cardsNode}</div>
-            </div>
-            {!isAddCardOpened && canAddCard && (
-              <button
-                type="button"
-                disabled={!list.isPersisted}
-                className={styles.addCardButton}
-                onClick={handleAddCardClick}
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,
+                                         jsx-a11y/no-static-element-interactions */}
+              <div
+                {...dragHandleProps} // eslint-disable-line react/jsx-props-no-spreading
+                className={classNames(styles.header, canEdit && styles.headerEditable)}
+                onClick={handleHeaderClick}
               >
-                <PlusMathIcon className={styles.addCardButtonIcon} />
-                <span className={styles.addCardButtonText}>
-                  {cardIds.length > 0 ? t('action.addAnotherCard') : t('action.addCard')}
-                </span>
-              </button>
-            )}
+                {isEditNameOpened ? (
+                  <EditName listId={id} onClose={handleEditNameClose} />
+                ) : (
+                  <div className={styles.headerName}>
+                    {list.color && (
+                      <Icon
+                        name="circle"
+                        className={classNames(
+                          styles.headerNameColor,
+                          globalStyles[`color${upperFirst(camelCase(list.color))}`],
+                        )}
+                      />
+                    )}
+                    {list.name}
+                  </div>
+                )}
+                {list.type !== ListTypes.ACTIVE && (
+                  <Icon
+                    name={ListTypeIcons[list.type]}
+                    className={classNames(
+                      styles.headerIcon,
+                      list.isPersisted && (canEdit || canArchiveCards) && styles.headerIconHidable,
+                    )}
+                  />
+                )}
+                {list.isPersisted &&
+                  (canEdit ? (
+                    <ActionsPopup listId={id} onNameEdit={handleNameEdit} onCardAdd={handleCardAdd}>
+                      <Button className={styles.headerButton}>
+                        <Icon fitted name="pencil" size="small" />
+                      </Button>
+                    </ActionsPopup>
+                  ) : (
+                    canArchiveCards && (
+                      <ArchiveCardsPopup listId={id}>
+                        <Button className={styles.headerButton}>
+                          <Icon fitted name="archive" size="small" />
+                        </Button>
+                      </ArchiveCardsPopup>
+                    )
+                  ))}
+              </div>
+              <div ref={cardsWrapperRef} className={styles.cardsInnerWrapper}>
+                <div className={styles.cardsOuterWrapper}>{cardsNode}</div>
+              </div>
+              {!isAddCardOpened && canAddCard && (
+                <>
+                  {!board.name.includes('Arte') && !list.name.includes('Solic') && (
+                    <button
+                      type="button"
+                      disabled={!list.isPersisted}
+                      className={styles.addCardButton}
+                      onClick={handleAddCardClick}
+                    >
+                      <PlusMathIcon className={styles.addCardButtonIcon} />
+                      <span className={styles.addCardButtonText}>
+                        {cardIds.length > 0 ? t('action.addAnotherCard') : t('action.addCard')}
+                      </span>
+                    </button>
+                  )}
+                  {board.name.includes('Arte') && list.name.includes('Solic') && (
+                    <button
+                      type="button"
+                      disabled={!list.isPersisted}
+                      className={styles.addCardButton}
+                      onClick={() => setRequestArtModalOpen(true)}
+                    >
+                      <PlusMathIcon className={styles.addCardButtonIcon} />
+                      <span className={styles.addCardButtonText}>Solicitar Arte</span>
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </Draggable>
+        )}
+      </Draggable>
+
+      <RequestArtModal
+        open={isRequestArtModalOpen}
+        onClose={() => setRequestArtModalOpen(false)}
+        onCreate={handleCardCreate}
+      />
+    </div>
   );
 });
 
