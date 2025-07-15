@@ -24,6 +24,7 @@ import notifications from './notifications';
 import notificationServices from './notification-services';
 import marketingWatchers from './marketing';
 import designWatchers from './design';
+import inventoryWatchers from './inventory';
 
 export default [
   router,
@@ -52,4 +53,5 @@ export default [
   notificationServices,
   marketingWatchers,
   designWatchers,
+  inventoryWatchers,
 ];

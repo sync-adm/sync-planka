@@ -26,6 +26,7 @@ import notifications from './notifications';
 import notificationServices from './notification-services';
 import marketing from './marketing';
 import design from './design';
+import inventory from './inventory';
 
 export { http, socket };
 
@@ -56,4 +57,5 @@ export default {
   ...notificationServices,
   ...marketing,
   ...design,
+  ...inventory,
 };
