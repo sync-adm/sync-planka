@@ -8,6 +8,7 @@ import selectors from '../../../../selectors';
 import styles from './ArtModal.module.scss';
 import formatBRL from '../../../../utils/parse-currency';
 import entryActions from '../../../../entry-actions';
+import { buildVehicleUrl } from '../../../../services/IntegrationFactory';
 
 const DEFAULT_DATA = {
   entryAmount: '',
@@ -70,15 +71,24 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
       inventory.body &&
       inventory.body.data &&
       Array.isArray(inventory.body.data) &&
-      inventory.body.data.length > 0
+      inventory.body.data.length > 0 &&
+      project
     ) {
       const selectedVehicle = inventory.body.data.find((item) => item.id === data.selectedVehicle);
+
+      if (!selectedVehicle) {
+        return;
+      }
+
       const vehicleImages = selectedVehicle?.images.split(',') || [];
+
+      // Monta a URL baseada no tipo de integração e domínio do projeto
+      const vehicleUrl = buildVehicleUrl(selectedVehicle, project.integrationType, project.domain);
 
       const name = `${selectedVehicle.plate} - ${selectedVehicle.model} - ${selectedVehicle.modelYear}`;
 
       const description = `
-https://www.sync.com.br
+${vehicleUrl}
 
 ${
   modeEntry
@@ -107,6 +117,7 @@ ${vehicleImages
     }
   }, [
     inventory,
+    project,
     modeEntry,
     data.entryAmount,
     data.installmentValue,

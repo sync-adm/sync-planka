@@ -152,13 +152,13 @@ const AddProjectModal = React.memo(() => {
 
           <Form.Group widths="equal">
             <Form.Field>
-              <div className={styles.text}>{t('common.subdomain')}</div>
+              <div className={styles.text}>Código do Estoque</div>
               <Input
                 fluid
                 inverted
                 name="subdomain"
                 value={data.subdomain}
-                placeholder={t('common.enterSubdomain')}
+                placeholder="Digite o código do estoque..."
                 maxLength={64}
                 readOnly={isSubmitting}
                 onKeyDown={handleSubdomainKeyDown}
