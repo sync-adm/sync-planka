@@ -29,6 +29,7 @@ const AddProjectModal = React.memo(() => {
   const [data, handleFieldChange, setData] = useForm(() => ({
     name: '',
     description: '',
+    subdomain: '',
     type: ProjectTypes.PRIVATE,
     ...defaultData,
     ...(defaultType && {
@@ -43,6 +44,7 @@ const AddProjectModal = React.memo(() => {
       ...data,
       name: data.name.trim(),
       description: data.description.trim() || null,
+      subdomain: data.subdomain.trim() || null,
     };
 
     if (!cleanData.name) {
@@ -62,6 +64,15 @@ const AddProjectModal = React.memo(() => {
   }, [submit]);
 
   const handleDescriptionKeyDown = useCallback(
+    (event) => {
+      if (isModifierKeyPressed(event) && event.key === 'Enter') {
+        submit();
+      }
+    },
+    [submit],
+  );
+
+  const handleSubdomainKeyDown = useCallback(
     (event) => {
       if (isModifierKeyPressed(event) && event.key === 'Enter') {
         submit();
@@ -127,6 +138,19 @@ const AddProjectModal = React.memo(() => {
             spellCheck={false}
             className={styles.field}
             onKeyDown={handleDescriptionKeyDown}
+            onChange={handleFieldChange}
+          />
+          <div className={styles.text}>{t('common.subdomain')}</div>
+          <Input
+            fluid
+            inverted
+            name="subdomain"
+            value={data.subdomain}
+            placeholder={t('common.enterSubdomain')}
+            maxLength={64}
+            readOnly={isSubmitting}
+            className={styles.field}
+            onKeyDown={handleSubdomainKeyDown}
             onChange={handleFieldChange}
           />
           <Button

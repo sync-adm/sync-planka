@@ -13,7 +13,7 @@ services:
       - 1337:1337
     environment:
       - BASE_URL=http://localhost:1337
-      - DATABASE_URL=postgresql://postgres@postgres/planka
+      - DATABASE_URL=postgresql://postgres@postgres:5432/planka
       - SECRET_KEY=notsecretkey
 
       # - LOG_LEVEL=warn
@@ -106,6 +106,8 @@ services:
     restart: on-failure
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=planka
       - POSTGRES_HOST_AUTH_METHOD=trust

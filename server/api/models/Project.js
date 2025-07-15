@@ -62,6 +62,12 @@ module.exports = {
       isNotEmptyString: true,
       allowNull: true,
     },
+    subdomain: {
+      type: 'string',
+      isNotEmptyString: true,
+      allowNull: true,
+      required: false,
+    },
     backgroundType: {
       type: 'string',
       isIn: Object.values(BackgroundTypes),

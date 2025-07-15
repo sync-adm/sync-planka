@@ -93,6 +93,7 @@ export default {
       enterDescription: 'Digite a descrição...',
       enterFilename: 'Digite o nome do arquivo',
       enterListTitle: 'Digite o título da lista...',
+      enterSubdomain: 'Digite o subdomínio...',
       enterTaskDescription: 'Digite a descrição da tarefa...',
       filterByLabels_title: 'Filtrar por Rótulos',
       filterByMembers_title: 'Filtrar por Membros',
@@ -149,6 +150,7 @@ export default {
         'Não há pré-visualização disponível para este anexo.',
       time: 'Tempo',
       title: 'Título',
+      subdomain: 'Subdomínio',
       userActions_title: 'Ações do Usuário',
       userAddedThisCardToList: '<0>{{user}}</0> adicionou este cartão a {{list}}',
       userLeftNewCommentToCard:

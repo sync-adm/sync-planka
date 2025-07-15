@@ -16,12 +16,19 @@ module.exports = {
       maxLength: 1024,
       allowNull: true,
     },
+    subdomain: {
+      type: 'string',
+      isNotEmptyString: true,
+      maxLength: 8,
+      allowNull: true,
+      required: false,
+    },
   },
 
   async fn(inputs) {
     const { currentUser } = this.req;
 
-    const values = _.pick(inputs, ['type', 'name', 'description']);
+    const values = _.pick(inputs, ['type', 'name', 'description', 'subdomain']);
 
     const { project, projectManager } = await sails.helpers.projects.createOne.with({
       values,
