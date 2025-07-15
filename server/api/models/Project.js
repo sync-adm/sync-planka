@@ -68,6 +68,18 @@ module.exports = {
       allowNull: true,
       required: false,
     },
+    domain: {
+      type: 'string',
+      required: true,
+      description: 'Domínio personalizado do site',
+    },
+    integrationType: {
+      type: 'string',
+      isIn: ['Sync', 'Boom Sistemas'],
+      required: true,
+      description: 'Tipo de integração',
+      columnName: 'integration_type',
+    },
     backgroundType: {
       type: 'string',
       isIn: Object.values(BackgroundTypes),

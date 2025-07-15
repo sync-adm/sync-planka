@@ -30,6 +30,8 @@ const AddProjectModal = React.memo(() => {
     name: '',
     description: '',
     subdomain: '',
+    domain: '',
+    integrationType: 'Sync',
     type: ProjectTypes.PRIVATE,
     ...defaultData,
     ...(defaultType && {
@@ -45,10 +47,17 @@ const AddProjectModal = React.memo(() => {
       name: data.name.trim(),
       description: data.description.trim() || null,
       subdomain: data.subdomain.trim() || null,
+      domain: data.domain.trim(),
+      integrationType: data.integrationType,
     };
 
     if (!cleanData.name) {
       nameFieldRef.current.select();
+      return;
+    }
+
+    if (!cleanData.domain) {
+      // Focar no campo domain se estiver vazio
       return;
     }
 
@@ -140,18 +149,51 @@ const AddProjectModal = React.memo(() => {
             onKeyDown={handleDescriptionKeyDown}
             onChange={handleFieldChange}
           />
-          <div className={styles.text}>{t('common.subdomain')}</div>
-          <Input
+
+          <Form.Group widths="equal">
+            <Form.Field>
+              <div className={styles.text}>{t('common.subdomain')}</div>
+              <Input
+                fluid
+                inverted
+                name="subdomain"
+                value={data.subdomain}
+                placeholder={t('common.enterSubdomain')}
+                maxLength={64}
+                readOnly={isSubmitting}
+                onKeyDown={handleSubdomainKeyDown}
+                onChange={handleFieldChange}
+              />
+            </Form.Field>
+            <Form.Field>
+              <div className={styles.text}>Domínio Personalizado *</div>
+              <Input
+                fluid
+                inverted
+                name="domain"
+                value={data.domain}
+                placeholder="Digite o domínio personalizado..."
+                maxLength={255}
+                readOnly={isSubmitting}
+                required
+                onChange={handleFieldChange}
+              />
+            </Form.Field>
+          </Form.Group>
+
+          <div className={styles.text}>Tipo de Integração *</div>
+          <Form.Select
             fluid
             inverted
-            name="subdomain"
-            value={data.subdomain}
-            placeholder={t('common.enterSubdomain')}
-            maxLength={64}
+            name="integrationType"
+            value={data.integrationType}
+            options={[
+              { key: 'sync', value: 'Sync', text: 'Sync' },
+              { key: 'boom', value: 'Boom Sistemas', text: 'Boom Sistemas' },
+            ]}
             readOnly={isSubmitting}
             className={styles.field}
-            onKeyDown={handleSubdomainKeyDown}
-            onChange={handleFieldChange}
+            onChange={(_, { name, value }) => setData((prev) => ({ ...prev, [name]: value }))}
           />
           <Button
             inverted

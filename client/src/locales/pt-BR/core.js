@@ -91,6 +91,7 @@ export default {
       email: 'E-mail',
       enterCardTitle: 'Digite o título do cartão...',
       enterDescription: 'Digite a descrição...',
+      enterDomain: 'Digite o domínio personalizado...',
       enterFilename: 'Digite o nome do arquivo',
       enterListTitle: 'Digite o título da lista...',
       enterSubdomain: 'Digite o subdomínio...',
@@ -151,6 +152,8 @@ export default {
       time: 'Tempo',
       title: 'Título',
       subdomain: 'Subdomínio',
+      domain: 'Domínio Personalizado',
+      integrationType: 'Tipo de Integração',
       userActions_title: 'Ações do Usuário',
       userAddedThisCardToList: '<0>{{user}}</0> adicionou este cartão a {{list}}',
       userLeftNewCommentToCard:
