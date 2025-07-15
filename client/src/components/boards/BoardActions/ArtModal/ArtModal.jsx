@@ -10,13 +10,10 @@ import formatBRL from '../../../../utils/parse-currency';
 import entryActions from '../../../../entry-actions';
 
 const DEFAULT_DATA = {
-  vehicleLicensePlate: '',
-  vehicleModel: '',
-  vehicleModelYear: '',
-  websiteLink: '',
   entryAmount: '',
   installmentValue: '',
   conditions: '',
+  selectedVehicle: '',
 };
 
 const ArtModal = React.memo(({ open, onClose, onCreate }) => {
@@ -25,7 +22,6 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
   const [data, handleFieldChange, setData] = useForm(DEFAULT_DATA);
   const [modeEntry, setModeEntry] = useState(true);
 
-  // eslint-disable-next-line no-unused-vars
   const [vehicleOptions, setVehicleOptions] = useState([]);
 
   const selectProjectById = useMemo(() => selectors.makeSelectProjectById(), []);
@@ -44,12 +40,14 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
 
   useEffect(() => {
     if (
+      inventory &&
+      inventory.body &&
       inventory.body.data &&
       Array.isArray(inventory.body.data) &&
       inventory.body.data.length > 0
     ) {
       const options = inventory.body.data.map((item) => ({
-        label: `${item.plate} - ${item.make} ${item.model}`,
+        text: `${item.plate ?? '*'} - ${item.make} ${item.model} ${item.version} | ${item.modelYear}`,
         value: item.id,
       }));
 
@@ -67,10 +65,20 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
   }, [modeEntry, setData]);
 
   const submit = useCallback(() => {
-    const name = `${data.vehicleLicensePlate} - ${data.vehicleModel} - ${data.vehicleModelYear}`;
+    if (
+      inventory &&
+      inventory.body &&
+      inventory.body.data &&
+      Array.isArray(inventory.body.data) &&
+      inventory.body.data.length > 0
+    ) {
+      const selectedVehicle = inventory.body.data.find((item) => item.id === data.selectedVehicle);
+      const vehicleImages = selectedVehicle?.images.split(',') || [];
 
-    const description = `
-${data.websiteLink}
+      const name = `${selectedVehicle.plate} - ${selectedVehicle.model} - ${selectedVehicle.modelYear}`;
+
+      const description = `
+https://www.sync.com.br
 
 ${
   modeEntry
@@ -78,19 +86,36 @@ ${
 Parcela: ${data.installmentValue}`
     : `Condições: ${data.conditions}`
 }
+
+Imagens:
+${vehicleImages
+  .slice(0, 3)
+  .map((image) => `![Image](${image})`)
+  .join('\n \n')}
 `;
 
-    const payload = {
-      name,
-      description,
-      type: 'project',
-    };
+      const payload = {
+        name,
+        description,
+        type: 'project',
+      };
 
-    onCreate(payload, true);
+      onCreate(payload, true);
 
-    setData(DEFAULT_DATA);
-    onClose();
-  }, [data, modeEntry, setData, onClose, onCreate]);
+      setData(DEFAULT_DATA);
+      onClose();
+    }
+  }, [
+    inventory,
+    modeEntry,
+    data.entryAmount,
+    data.installmentValue,
+    data.conditions,
+    data.selectedVehicle,
+    onCreate,
+    setData,
+    onClose,
+  ]);
 
   const handleSubmit = useCallback(() => {
     submit();
@@ -109,48 +134,23 @@ Parcela: ${data.installmentValue}`
 
   return (
     <Modal closeIcon open={open} onClose={onClose} className={styles.wrapper}>
-      <Modal.Content>
+      <Modal.Content className={styles.content}>
         <Modal.Header className={styles.modal_header}>
           Solicitar Nova Arte{project ? ` - ${project.name}` : ''}
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
-          <Form.Group widths="equal">
-            <Form.Input
-              label="Placa"
-              name="vehicleLicensePlate"
-              value={data.vehicleLicensePlate}
-              onChange={handleFieldChange}
-              placeholder="Digite a placa"
-              input={{ required: true }}
-            />
-
-            <Form.Input
-              label="Modelo"
-              name="vehicleModel"
-              value={data.vehicleModel}
-              onChange={handleFieldChange}
-              placeholder="Digite o modelo"
-              input={{ required: true }}
-            />
-
-            <Form.Input
-              label="Ano Modelo"
-              name="vehicleModelYear"
-              value={data.vehicleModelYear}
-              onChange={handleFieldChange}
-              placeholder="Digite o ano modelo"
-              input={{ required: true }}
-            />
-          </Form.Group>
-
-          <Form.Input
+          <Form.Dropdown
             fluid
-            label="Link do Site"
-            name="websiteLink"
-            value={data.websiteLink}
-            onChange={handleFieldChange}
-            placeholder="Digite o link do site"
-            input={{ required: true }}
+            search
+            selection
+            label="Selecionar Veículo"
+            name="selectedVehicle"
+            value={data.selectedVehicle}
+            onChange={(_, { name, value }) => setData((prev) => ({ ...prev, [name]: value }))}
+            options={vehicleOptions}
+            placeholder="Digite para buscar um veículo..."
+            clearable
+            noResultsMessage="Nenhum veículo encontrado"
           />
 
           <Form.Field>
