@@ -22,8 +22,9 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
 
   const [data, handleFieldChange, setData] = useForm(DEFAULT_DATA);
   const [modeEntry, setModeEntry] = useState(true);
-
   const [vehicleOptions, setVehicleOptions] = useState([]);
+  const [vehiclePreviewUrl, setVehiclePreviewUrl] = useState('');
+  const [selectedVehicleData, setSelectedVehicleData] = useState(null);
 
   const selectProjectById = useMemo(() => selectors.makeSelectProjectById(), []);
   const currentProject = useSelector(selectors.selectCurrentProject);
@@ -65,30 +66,36 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
     }));
   }, [modeEntry, setData]);
 
-  const submit = useCallback(() => {
-    if (
-      inventory &&
-      inventory.body &&
-      inventory.body.data &&
-      Array.isArray(inventory.body.data) &&
-      inventory.body.data.length > 0 &&
-      project
-    ) {
+  useEffect(() => {
+    if (data.selectedVehicle && inventory?.body?.data && project) {
       const selectedVehicle = inventory.body.data.find((item) => item.id === data.selectedVehicle);
 
-      if (!selectedVehicle) {
-        return;
+      if (selectedVehicle) {
+        const vehicleUrl = buildVehicleUrl(
+          selectedVehicle,
+          project.integrationType,
+          project.domain,
+        );
+        setVehiclePreviewUrl(vehicleUrl);
+        setSelectedVehicleData(selectedVehicle);
       }
+    } else {
+      setVehiclePreviewUrl('');
+      setSelectedVehicleData(null);
+    }
+  }, [data.selectedVehicle, inventory, project]);
 
-      const vehicleImages = selectedVehicle?.images.split(',') || [];
+  const submit = useCallback(() => {
+    if (!selectedVehicleData || !vehiclePreviewUrl) {
+      return;
+    }
 
-      // Monta a URL baseada no tipo de integração e domínio do projeto
-      const vehicleUrl = buildVehicleUrl(selectedVehicle, project.integrationType, project.domain);
+    const vehicleImages = selectedVehicleData?.images.split(',') || [];
 
-      const name = `${selectedVehicle.plate} - ${selectedVehicle.model} - ${selectedVehicle.modelYear}`;
+    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.model} - ${selectedVehicleData.modelYear}`;
 
-      const description = `
-${vehicleUrl}
+    const description = `
+${vehiclePreviewUrl}
 
 ${
   modeEntry
@@ -104,25 +111,22 @@ ${vehicleImages
   .join('\n \n')}
 `;
 
-      const payload = {
-        name,
-        description,
-        type: 'project',
-      };
+    const payload = {
+      name,
+      description,
+      type: 'project',
+    };
 
-      onCreate(payload, true);
-
-      setData(DEFAULT_DATA);
-      onClose();
-    }
+    onCreate(payload, true);
+    setData(DEFAULT_DATA);
+    onClose();
   }, [
-    inventory,
-    project,
+    selectedVehicleData,
+    vehiclePreviewUrl,
     modeEntry,
     data.entryAmount,
     data.installmentValue,
     data.conditions,
-    data.selectedVehicle,
     onCreate,
     setData,
     onClose,
@@ -163,6 +167,21 @@ ${vehicleImages
             clearable
             noResultsMessage="Nenhum veículo encontrado"
           />
+
+          <div className={styles.link_wrapper}>
+            {vehiclePreviewUrl && selectedVehicleData && (
+              <Form.Field>
+                <a
+                  href={vehiclePreviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
+                  Visualizar veículo no site
+                </a>
+              </Form.Field>
+            )}
+          </div>
 
           <Form.Field>
             <Checkbox

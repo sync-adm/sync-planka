@@ -1,61 +1,3 @@
-# PLANKA
-
-**Project mastering driven by fun**
-
-![Version](https://img.shields.io/github/package-json/v/plankanban/planka?style=flat-square) [![Docker Pulls](https://img.shields.io/badge/docker_pulls-6M%2B-%23066da5?style=flat-square&color=red)](https://github.com/plankanban/planka/pkgs/container/planka) [![Contributors](https://img.shields.io/github/contributors/plankanban/planka?style=flat-square&color=blue)](https://github.com/plankanban/planka/graphs/contributors) [![Chat](https://img.shields.io/discord/1041440072953765979?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/WqqYNd7Jvt)
-
-![Demo](https://raw.githubusercontent.com/plankanban/planka/master/assets/demo.gif)
-
-[**Client demo**](https://plankanban.github.io/planka) (without server features).
-
-> ⚠️ The demo GIF and client demo are based on **v1** and will be updated soon.
-
-## Key Features
-
-- **Collaborative Kanban Boards**: Create projects, boards, lists, cards, and manage tasks with an intuitive drag-and-drop interface
-- **Real-Time Updates**: Instant syncing across all users, no refresh needed
-- **Rich Markdown Support**: Write beautifully formatted card descriptions with a powerful markdown editor
-- **Flexible Notifications**: Get alerts through 100+ providers, fully customizable to your workflow
-- **Seamless Authentication**: Single sign-on with OpenID Connect integration
-- **Multilingual & Easy to Translate**: Full internationalization support for a global audience
-
-## How to Deploy
-
-PLANKA is easy to install using multiple methods - learn more in the [installation guide](https://docs.planka.cloud/docs/welcome/).
-
-For configuration and environment settings, see the [configuration section](https://docs.planka.cloud/docs/category/configuration/).
-
-## Contact
-
-Interested in a hosted version of PLANKA? Email us at [github@planka.group](mailto:github@planka.group).
-
-For any security issues, please do not create a public issue on GitHub - instead, report it privately by emailing [security@planka.group](mailto:security@planka.group).
-
-**Note:** We do NOT offer any public support via email, please use GitHub.
-
-**Join our community:** Get help, share ideas, or contribute on our [Discord server](https://discord.gg/WqqYNd7Jvt).
-
-## License
-
-PLANKA is [fair-code](https://faircode.io) distributed under the [Fair Use License](https://github.com/plankanban/planka/blob/master/LICENSES/PLANKA%20Community%20License%20EN.md) and [PLANKA Pro/Enterprise License](https://github.com/plankanban/planka/blob/master/LICENSES/PLANKA%20Commercial%20License%20EN.md).
-
-- **Source Available**: The source code is always visible
-- **Self-Hostable**: Deploy and host it anywhere
-- **Extensible**: Customize with your own functionality
-- **Enterprise Licenses**: Available for additional features and support
-
-For more details, check the [License Guide](https://github.com/plankanban/planka/blob/master/LICENSES/PLANKA%20License%20Guide%20EN.md).
-
-## Contributing
-
-Found a bug or have a feature request? Check out our [Contributing Guide](https://github.com/plankanban/planka/blob/master/CONTRIBUTING.md) to get started.
-
-For setting up the project locally, see the [development section](https://docs.planka.cloud/docs/category/development/).
-
-**Thanks to all our contributors!**
-
-[![Contributors](https://contrib.rocks/image?repo=plankanban/planka)](https://github.com/plankanban/planka/graphs/contributors)
-
 # DOCS
 
 # Documentação: Como Consumir Endpoints no Projeto Planka
@@ -418,3 +360,119 @@ const isLoading = useSelector(selectors.selectInventoryIsLoading);
 - **Loading States**: Estados de carregamento são gerenciados automaticamente
 - **Cancelamento**: Redux-Saga permite cancelar requisições se necessário
 - **WebSockets**: O projeto usa WebSockets (socket.io) ao invés de HTTP
+
+---
+
+<br>
+<br>
+<br>
+<br>
+
+# 🗄️ Como Fazer Migração de Banco (Genérico)
+
+### Quando criar uma migration?
+
+Sempre que você precisar **criar/alterar tabelas ou colunas** sem perder dados existentes.
+
+### Passos Genéricos
+
+1. **Gerar o arquivo de migration**
+
+   ```bash
+   docker-compose -f docker-compose-dev.yml exec planka-server \
+     npx knex migrate:make <nome_da_migration> --knexfile=knexfile.js --cwd db
+   ```
+
+2. **Implementar `up` e `down`** no arquivo gerado:
+
+   ```js
+   exports.up = (knex) =>
+     knex.schema.alterTable("<tabela>", (table) => {
+       table.string("nova_coluna").nullable();
+       // …ou table.enu, table.integer, etc.
+     });
+
+   exports.down = (knex) =>
+     knex.schema.alterTable("<tabela>", (table) => {
+       table.dropColumn("nova_coluna");
+     });
+   ```
+
+3. **Ajustar permissões** (caso não consiga salvar o arquivo):
+
+   ```bash
+   sudo chown -R $(id -u):$(id -g) server/db/migrations
+   ```
+
+4. **Executar as migrations**
+
+   ```bash
+   docker-compose -f docker-compose-dev.yml exec planka-server \
+     npx knex migrate:latest --knexfile=knexfile.js --cwd db
+   ```
+
+5. **Atualizar seu modelo** (Ex.: `api/models/Project.js`):
+
+   ```js
+   module.exports = {
+     attributes: {
+       // …outros…
+       nomeDaColuna: { type: "string", allowNull: true },
+     },
+   };
+   ```
+
+6. **Reiniciar o container** e testar:
+
+   ```bash
+   docker-compose -f docker-compose-dev.yml restart planka-server
+   ```
+
+---
+
+## 📌 Exemplo Real de Migração: `domain` + `integrationType`
+
+```js
+// migrations/20250716120000_add_domain_and_integration_type.js
+
+exports.up = (knex) =>
+  knex.schema.alterTable("projects", (table) => {
+    table.string("domain").nullable().comment("Domínio personalizado");
+    table
+      .enu("integrationType", ["Sync", "Boom Sistemas"])
+      .notNullable()
+      .comment("Tipo de integração");
+  });
+
+exports.down = (knex) =>
+  knex.schema.alterTable("projects", (table) => {
+    table.dropColumn("integrationType");
+    table.dropColumn("domain");
+  });
+```
+
+**Comandos**:
+
+```bash
+# criar
+docker-compose -f docker-compose-dev.yml exec planka-server \
+  npx knex migrate:make add_domain_and_integration_type --knexfile=knexfile.js --cwd db
+
+# aplicar
+docker-compose -f docker-compose-dev.yml exec planka-server \
+  npx knex migrate:latest --knexfile=knexfile.js --cwd db
+
+# reiniciar
+docker-compose -f docker-compose-dev.yml restart planka-server
+```
+
+---
+
+## 🚀 Contribuindo
+
+- **Siga o padrão acima** para qualquer recurso novo.
+- **Mantenha nomes consistentes** (`Recurso`, `fetchRecurso`, etc.).
+- **Documente seu migration** e seu modelo.
+- **Teste sempre** antes de enviar PR.
+
+---
