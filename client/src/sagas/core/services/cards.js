@@ -147,7 +147,20 @@ export function* createCard(listId, data, autoOpen) {
 
   let card;
   try {
-    ({ item: card } = yield call(request, api.createCard, listId, nextData));
+    // Verificar se tem vehicleImages para usar API especial
+    if (nextData.vehicleImages && Array.isArray(nextData.vehicleImages)) {
+      const response = yield call(request, api.createCardWithVehicleImages, listId, nextData);
+      card = response.item;
+
+      // Tratar attachments retornados
+      if (response.included && response.included.attachments) {
+        yield* response.included.attachments.map((attachment) =>
+          put(actions.handleAttachmentCreate(attachment)),
+        );
+      }
+    } else {
+      ({ item: card } = yield call(request, api.createCard, listId, nextData));
+    }
   } catch (error) {
     yield put(actions.createCard.failure(localId, error));
     return;

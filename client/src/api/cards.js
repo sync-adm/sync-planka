@@ -61,6 +61,18 @@ const createCard = (listId, data, headers) =>
     item: transformCard(body.item),
   }));
 
+const createCardWithVehicleImages = (listId, data, headers) =>
+  socket
+    .post(`/lists/${listId}/cards/with-vehicle-images`, transformCardData(data), headers)
+    .then((body) => ({
+      ...body,
+      item: transformCard(body.item),
+      included: {
+        ...body.included,
+        attachments: body.included.attachments.map(transformAttachment),
+      },
+    }));
+
 const getCard = (id, headers) =>
   socket.get(`/cards/${id}`, undefined, headers).then((body) => ({
     ...body,
@@ -130,6 +142,7 @@ const makeHandleCardDelete = makeHandleCardUpdate;
 export default {
   getCards,
   createCard,
+  createCardWithVehicleImages,
   getCard,
   updateCard,
   duplicateCard,
