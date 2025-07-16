@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { isDueDate, isStopwatch } = require('../../../utils/validators');
 const { idInput } = require('../../../utils/inputs');
 
@@ -81,7 +82,6 @@ module.exports = {
   async fn(inputs) {
     const { currentUser } = this.req;
 
-    // Validar vehicleImages
     if (!inputs.vehicleImages || !Array.isArray(inputs.vehicleImages)) {
       throw Errors.INVALID_VEHICLE_IMAGES;
     }
@@ -90,10 +90,8 @@ module.exports = {
       throw Errors.VEHICLE_IMAGES_REQUIRED;
     }
 
-    // Limitar a 3 imagens
     const imageUrls = inputs.vehicleImages.slice(0, 3);
 
-    // Validar URLs
     const urlRegex = /^https?:\/\/.+/;
     const validUrls = imageUrls.filter((url) => typeof url === 'string' && urlRegex.test(url));
 
@@ -111,7 +109,7 @@ module.exports = {
     );
 
     if (!boardMembership) {
-      throw Errors.LIST_NOT_FOUND; // Forbidden
+      throw Errors.LIST_NOT_FOUND;
     }
 
     if (boardMembership.role !== BoardMembership.Roles.EDITOR) {
@@ -127,7 +125,6 @@ module.exports = {
       'stopwatch',
     ]);
 
-    // Criar o card primeiro
     const card = await sails.helpers.cards.createOne
       .with({
         project,
@@ -141,19 +138,16 @@ module.exports = {
       })
       .intercept('positionMustBeInValues', () => Errors.POSITION_MUST_BE_PRESENT);
 
-    // Download e criação dos attachments das imagens
     const attachments = [];
     const downloadPromises = validUrls.map(async (imageUrl, index) => {
       try {
         const filename = `veiculo-imagem-${index + 1}.jpg`;
 
-        // Download e processamento da imagem
         const imageData = await sails.helpers.attachments.downloadAndProcessImage.with({
           imageUrl,
           filename,
         });
 
-        // Criar attachment
         const attachment = await sails.helpers.attachments.createOne.with({
           project,
           board,
@@ -175,10 +169,8 @@ module.exports = {
       }
     });
 
-    // Aguardar todos os downloads
     const downloadedAttachments = await Promise.all(downloadPromises);
 
-    // Filtrar attachments válidos
     downloadedAttachments.forEach((attachment) => {
       if (attachment) {
         attachments.push(attachment);

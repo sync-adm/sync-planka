@@ -90,12 +90,12 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
       return;
     }
 
-    const vehicleImages = selectedVehicleData?.images.split(',') || [];
+    const vehicleImages = selectedVehicleData?.images.split(',').filter((img) => img.trim()) || [];
 
-    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.model} - ${selectedVehicleData.modelYear}`;
+    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.make} ${selectedVehicleData.version} - ${selectedVehicleData.modelYear} | ${selectedVehicleData.transmission}`;
 
     const description = `
-${vehiclePreviewUrl}
+${name.replace(`${selectedVehicleData.plate} - `, '')}
 
 ${
   modeEntry
@@ -104,17 +104,14 @@ Parcela: ${data.installmentValue}`
     : `Condições: ${data.conditions}`
 }
 
-Imagens:
-${vehicleImages
-  .slice(0, 3)
-  .map((image) => `![Image](${image})`)
-  .join('\n \n')}
+${vehiclePreviewUrl}
 `;
 
     const payload = {
       name,
       description,
       type: 'project',
+      vehicleImages: vehicleImages.slice(0, 1),
     };
 
     onCreate(payload, true);

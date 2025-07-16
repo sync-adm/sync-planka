@@ -20,7 +20,6 @@ module.exports = {
 
   async fn(inputs) {
     return new Promise((resolve, reject) => {
-      // Seguir até 3 redirects
       let redirectCount = 0;
       const maxRedirects = 3;
 
@@ -34,7 +33,6 @@ module.exports = {
         const currentProtocol = currentParsedUrl.protocol === 'https:' ? https : http;
 
         const request = currentProtocol.get(currentUrl, (response) => {
-          // Seguir redirects
           if (
             response.statusCode >= 300 &&
             response.statusCode < 400 &&
@@ -50,7 +48,6 @@ module.exports = {
             return;
           }
 
-          // Verificar se é realmente uma imagem
           const contentType = response.headers['content-type'];
           if (!contentType || !contentType.startsWith('image/')) {
             reject(new Error(`Tipo de conteúdo inválido: ${contentType}`));
@@ -59,7 +56,7 @@ module.exports = {
 
           const chunks = [];
           let totalSize = 0;
-          const maxSize = 10 * 1024 * 1024; // 10MB máximo
+          const maxSize = 10 * 1024 * 1024;
 
           response.on('data', (chunk) => {
             chunks.push(chunk);
@@ -74,7 +71,7 @@ module.exports = {
           response.on('end', async () => {
             try {
               const buffer = Buffer.concat(chunks);
-              const processedData = await this.processImageBuffer(
+              const processedData = await module.exports.processImageBuffer(
                 buffer,
                 inputs.filename,
                 contentType,
@@ -107,18 +104,14 @@ module.exports = {
   async processImageBuffer(buffer, originalFilename, contentType) {
     const fileManager = sails.hooks['file-manager'].getInstance();
 
-    // Criar referência do arquivo
     const { id: fileReferenceId } = await FileReference.create().fetch();
     const dirPathSegment = `${sails.config.custom.attachmentsPathSegment}/${fileReferenceId}`;
 
-    // Gerar nome do arquivo seguro
     const filename = filenamify(originalFilename);
 
-    // Obter informações do arquivo
     const mimeType = contentType || mime.getType(filename) || 'image/jpeg';
     const sizeInBytes = buffer.length;
 
-    // Salvar arquivo original
     await fileManager.save(`${dirPathSegment}/${filename}`, buffer, 'application/octet-stream');
 
     const data = {
@@ -130,7 +123,6 @@ module.exports = {
       image: null,
     };
 
-    // Processar imagem com Sharp (similar ao process-uploaded-file.js)
     if (!['image/svg+xml', 'application/pdf'].includes(mimeType)) {
       try {
         let image = sharp(buffer, {
@@ -149,7 +141,6 @@ module.exports = {
           const thumbnailsExtension = metadata.format === 'jpeg' ? 'jpg' : metadata.format;
 
           try {
-            // Criar thumbnail 360px
             const outside360Buffer = await image
               .resize(360, 360, {
                 fit: 'outside',
@@ -167,7 +158,6 @@ module.exports = {
               'application/octet-stream',
             );
 
-            // Criar thumbnail 720px
             const outside720Buffer = await image
               .resize(720, 720, {
                 fit: 'outside',
