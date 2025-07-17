@@ -67,22 +67,31 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
   }, [modeEntry, setData]);
 
   useEffect(() => {
-    if (data.selectedVehicle && inventory?.body?.data && project) {
-      const selectedVehicle = inventory.body.data.find((item) => item.id === data.selectedVehicle);
+    console.log(vehiclePreviewUrl);
+  }, [vehiclePreviewUrl]);
 
-      if (selectedVehicle) {
-        const vehicleUrl = buildVehicleUrl(
-          selectedVehicle,
-          project.integrationType,
-          project.domain,
+  useEffect(() => {
+    function updateVehiclePreviewUrl() {
+      if (data.selectedVehicle && inventory?.body?.data && project) {
+        const selectedVehicle = inventory.body.data.find(
+          (item) => item.id === data.selectedVehicle,
         );
-        setVehiclePreviewUrl(vehicleUrl);
-        setSelectedVehicleData(selectedVehicle);
+
+        if (selectedVehicle) {
+          const vehicleUrl = buildVehicleUrl(
+            selectedVehicle,
+            project.integrationType,
+            project.domain,
+          );
+          setVehiclePreviewUrl(vehicleUrl);
+          setSelectedVehicleData(selectedVehicle);
+        }
+      } else {
+        setVehiclePreviewUrl('');
+        setSelectedVehicleData(null);
       }
-    } else {
-      setVehiclePreviewUrl('');
-      setSelectedVehicleData(null);
     }
+    updateVehiclePreviewUrl();
   }, [data.selectedVehicle, inventory, project]);
 
   const submit = useCallback(() => {
