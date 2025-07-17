@@ -67,22 +67,31 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
   }, [modeEntry, setData]);
 
   useEffect(() => {
-    if (data.selectedVehicle && inventory?.body?.data && project) {
-      const selectedVehicle = inventory.body.data.find((item) => item.id === data.selectedVehicle);
+    console.log(vehiclePreviewUrl);
+  }, [vehiclePreviewUrl]);
 
-      if (selectedVehicle) {
-        const vehicleUrl = buildVehicleUrl(
-          selectedVehicle,
-          project.integrationType,
-          project.domain,
+  useEffect(() => {
+    function updateVehiclePreviewUrl() {
+      if (data.selectedVehicle && inventory?.body?.data && project) {
+        const selectedVehicle = inventory.body.data.find(
+          (item) => item.id === data.selectedVehicle,
         );
-        setVehiclePreviewUrl(vehicleUrl);
-        setSelectedVehicleData(selectedVehicle);
+
+        if (selectedVehicle) {
+          const vehicleUrl = buildVehicleUrl(
+            selectedVehicle,
+            project.integrationType,
+            project.domain,
+          );
+          setVehiclePreviewUrl(vehicleUrl);
+          setSelectedVehicleData(selectedVehicle);
+        }
+      } else {
+        setVehiclePreviewUrl('');
+        setSelectedVehicleData(null);
       }
-    } else {
-      setVehiclePreviewUrl('');
-      setSelectedVehicleData(null);
     }
+    updateVehiclePreviewUrl();
   }, [data.selectedVehicle, inventory, project]);
 
   const submit = useCallback(() => {
@@ -90,12 +99,12 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
       return;
     }
 
-    const vehicleImages = selectedVehicleData?.images.split(',') || [];
+    const vehicleImages = selectedVehicleData?.images.split(',').filter((img) => img.trim()) || [];
 
-    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.model} - ${selectedVehicleData.modelYear}`;
+    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.make} ${selectedVehicleData.version} - ${selectedVehicleData.modelYear} | ${selectedVehicleData.transmission}`;
 
     const description = `
-${vehiclePreviewUrl}
+${name.replace(`${selectedVehicleData.plate} - `, '')}
 
 ${
   modeEntry
@@ -104,17 +113,14 @@ Parcela: ${data.installmentValue}`
     : `Condições: ${data.conditions}`
 }
 
-Imagens:
-${vehicleImages
-  .slice(0, 3)
-  .map((image) => `![Image](${image})`)
-  .join('\n \n')}
+${vehiclePreviewUrl}
 `;
 
     const payload = {
       name,
       description,
       type: 'project',
+      vehicleImages: vehicleImages.slice(0, 1),
     };
 
     onCreate(payload, true);
