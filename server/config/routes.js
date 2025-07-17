@@ -84,6 +84,8 @@ module.exports.routes = {
   'PATCH /api/projects/:id': 'projects/update',
   'DELETE /api/projects/:id': 'projects/delete',
 
+  'GET /api/inventory/:subdomain': 'inventory/show',
+
   'POST /api/projects/:projectId/project-managers': 'project-managers/create',
   'DELETE /api/project-managers/:id': 'project-managers/delete',
 
@@ -117,6 +119,7 @@ module.exports.routes = {
 
   'GET /api/lists/:listId/cards': 'cards/index',
   'POST /api/lists/:listId/cards': 'cards/create',
+  'POST /api/lists/:listId/cards/with-vehicle-images': 'cards/create-with-vehicle-images',
   'GET /api/cards/:id': 'cards/show',
   'PATCH /api/cards/:id': 'cards/update',
   'POST /api/cards/:id/duplicate': 'cards/duplicate',

@@ -1,4 +1,4 @@
-import { call, fork, join, put, race, select, take } from 'redux-saga/effects';
+import { all, call, fork, join, put, race, select, take } from 'redux-saga/effects';
 import { LOCATION_CHANGE_HANDLE } from '../../../lib/redux-router';
 
 import { goToBoard, goToCard } from './router';
@@ -147,7 +147,20 @@ export function* createCard(listId, data, autoOpen) {
 
   let card;
   try {
-    ({ item: card } = yield call(request, api.createCard, listId, nextData));
+    if (nextData.vehicleImages && Array.isArray(nextData.vehicleImages)) {
+      const response = yield call(request, api.createCardWithVehicleImages, listId, nextData);
+      card = response.item;
+
+      if (response.included && response.included.attachments) {
+        yield all(
+          response.included.attachments.map((attachment) =>
+            put(actions.handleAttachmentCreate(attachment)),
+          ),
+        );
+      }
+    } else {
+      ({ item: card } = yield call(request, api.createCard, listId, nextData));
+    }
   } catch (error) {
     yield put(actions.createCard.failure(localId, error));
     return;

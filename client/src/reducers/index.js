@@ -9,6 +9,7 @@ import core from './core';
 import ui from './ui';
 import marketing from './marketing';
 import design from './design';
+import inventory from './inventory';
 
 export default combineReducers({
   router,
@@ -20,4 +21,5 @@ export default combineReducers({
   ui,
   marketing,
   design,
+  inventory,
 });

@@ -13,7 +13,7 @@ services:
       - 1337:1337
     environment:
       - BASE_URL=http://localhost:1337
-      - DATABASE_URL=postgresql://postgres@postgres/planka
+      - DATABASE_URL=postgresql://postgres@postgres:5432/planka
       - SECRET_KEY=notsecretkey
 
       # - LOG_LEVEL=warn
@@ -33,10 +33,10 @@ services:
       # - DEFAULT_LANGUAGE=en-US
 
       # Do not comment out DEFAULT_ADMIN_EMAIL if you want to prevent this user from being edited/deleted
-      # - DEFAULT_ADMIN_EMAIL=demo@demo.demo
-      # - DEFAULT_ADMIN_PASSWORD=demo
-      # - DEFAULT_ADMIN_NAME=Demo Demo
-      # - DEFAULT_ADMIN_USERNAME=demo
+      - DEFAULT_ADMIN_EMAIL=demo@demo.demo
+      - DEFAULT_ADMIN_PASSWORD=demo
+      - DEFAULT_ADMIN_NAME=Demo Demo
+      - DEFAULT_ADMIN_USERNAME=demo
 
       # - ACTIVE_USERS_LIMIT=
 
@@ -106,6 +106,8 @@ services:
     restart: on-failure
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=planka
       - POSTGRES_HOST_AUTH_METHOD=trust
