@@ -67,10 +67,6 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
   }, [modeEntry, setData]);
 
   useEffect(() => {
-    console.log(vehiclePreviewUrl);
-  }, [vehiclePreviewUrl]);
-
-  useEffect(() => {
     function updateVehiclePreviewUrl() {
       if (data.selectedVehicle && inventory?.body?.data && project) {
         const selectedVehicle = inventory.body.data.find(
