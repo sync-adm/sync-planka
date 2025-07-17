@@ -3,35 +3,38 @@
  * @returns { Promise<void> }
  */
 exports.up = async function (knex) {
-  // 1) adiciona `domain`
+  // 1) adiciona `domain` como nullable
   await knex.schema.alterTable('project', (table) => {
     table.string('domain').nullable();
   });
 
-  // 2) popula com o valor de subdomain
-  await knex('project')
-    .whereNull('domain')
-    .update({ domain: knex.raw('subdomain') });
+  // 2) backfill: preenche NULL com subdomain ou com valor default
+  //    troque 'example.com' pelo domínio padrão desejado
+  await knex.raw(`
+    UPDATE project
+      SET domain = COALESCE(subdomain, 'example.com')
+    WHERE domain IS NULL;
+  `);
 
-  // 3) torna NOT NULL
+  // 3) torna `domain` NOT NULL
   await knex.schema.alterTable('project', (table) => {
     table.string('domain').notNullable().alter();
   });
 
-  // 4) adiciona `integration_type`
+  // 4) adiciona `integration_type` como nullable
   await knex.schema.alterTable('project', (table) => {
     table.text('integration_type').nullable();
   });
 
-  // 5) popula com 'Sync'
+  // 5) popula `integration_type` com 'Sync'
   await knex('project').whereNull('integration_type').update({ integration_type: 'Sync' });
 
-  // 6) torna NOT NULL
+  // 6) torna `integration_type` NOT NULL
   await knex.schema.alterTable('project', (table) => {
     table.text('integration_type').notNullable().alter();
   });
 
-  // 7) recria a constraint de enum
+  // 7) (re)cria a constraint de enum para integration_type
   await knex.schema.raw(`
     ALTER TABLE project
       DROP CONSTRAINT IF EXISTS project_integration_type_check,
@@ -45,6 +48,7 @@ exports.up = async function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = async function (knex) {
+  // Reverte tudo: remove a constraint e as colunas
   await knex.schema.raw(`
     ALTER TABLE project
       DROP CONSTRAINT IF EXISTS project_integration_type_check,
