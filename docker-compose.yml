@@ -117,7 +117,7 @@ services:
     image: postgres:16-alpine
     restart: on-failure
     ports:
-      - 5432:5416
+      - 5416:5432
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
