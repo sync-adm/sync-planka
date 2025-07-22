@@ -80,6 +80,18 @@ module.exports = {
       description: 'Tipo de integração',
       columnName: 'integration_type',
     },
+    whatsappTarget: {
+      type: 'string',
+      columnName: 'whatsapp_target',
+      allowNull: true,
+      description: 'Número de WhatsApp para direcionar mensagens',
+    },
+    monthlyArtLimit: {
+      type: 'number',
+      columnName: 'monthly_art_limit',
+      allowNull: true,
+      description: 'Limite mensal de artes',
+    },
     backgroundType: {
       type: 'string',
       isIn: Object.values(BackgroundTypes),

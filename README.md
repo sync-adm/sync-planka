@@ -3,7 +3,18 @@
 </br>
 </br>
 
-# Documentação: Como Consumir Endpoints no Projeto Planka
+# Como ambiente de DEV com docker
+
+Na raiz do repositório executar o seguinte comando docker:
+
+```
+docker-compose -f docker-compose-dev.yml up
+```
+
+</br>
+</br>
+
+# Como Consumir Endpoints no Projeto Planka
 
 </br>
 

@@ -23,6 +23,19 @@ module.exports = {
       allowNull: true,
       required: false,
     },
+    whatsappTarget: {
+      type: 'string',
+      maxLength: 28,
+      allowNull: true,
+      description: 'Número de WhatsApp para direcionar mensagens',
+      columnName: 'whatsapp_target',
+    },
+    monthlyArtLimit: {
+      type: 'number',
+      allowNull: true,
+      description: 'Limite mensal de artes',
+      columnName: 'monthly_art_limit',
+    },
     domain: {
       type: 'string',
       required: true,
@@ -46,6 +59,8 @@ module.exports = {
       'subdomain',
       'domain',
       'integrationType',
+      'whatsappTarget',
+      'monthlyArtLimit',
     ]);
 
     const { project, projectManager } = await sails.helpers.projects.createOne.with({
