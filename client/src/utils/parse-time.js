@@ -116,7 +116,7 @@ export const getElapsedTime = (date) => {
   if (target > now) return '0m';
 
   const minutesTotal = differenceInMinutes(now, target);
-  const days = Math.floor(minutesTotal / 1440); // 60*24
+  const days = Math.floor(minutesTotal / 1440);
   const hours = Math.floor((minutesTotal % 1440) / 60);
   const minutes = minutesTotal % 60;
 
