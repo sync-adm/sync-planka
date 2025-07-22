@@ -20,6 +20,23 @@ export function* fetchMarketingCompletedRequests(data) {
   }
 }
 
+export function* fetchEvolutionGroups(data) {
+  yield put(actions.fetchEvolutionGroups(data));
+
+  try {
+    const accessToken = yield select(selectors.selectAccessToken);
+
+    const response = yield call(api.getEvolutionGroups, data, {
+      Authorization: `Bearer ${accessToken}`,
+    });
+
+    yield put(actions.fetchEvolutionGroupsSuccess(response));
+  } catch (error) {
+    yield put(actions.fetchEvolutionGroupsFailure(error));
+  }
+}
+
 export default {
   fetchMarketingCompletedRequests,
+  fetchEvolutionGroups,
 };

@@ -97,7 +97,7 @@ const ArtModal = React.memo(({ open, onClose, onCreate }) => {
 
     const vehicleImages = selectedVehicleData?.images.split(',').filter((img) => img.trim()) || [];
 
-    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.make} ${selectedVehicleData.version} - ${selectedVehicleData.modelYear} | ${selectedVehicleData.transmission}`;
+    const name = `${selectedVehicleData.plate} - ${selectedVehicleData.make} ${selectedVehicleData.model} ${selectedVehicleData.version} - ${selectedVehicleData.modelYear} ${selectedVehicleData.transmission ? `| ${selectedVehicleData.transmission}` : ''}`;
 
     const description = `
 ${name.replace(`${selectedVehicleData.plate} - `, '')}

@@ -15,6 +15,9 @@ services:
       - BASE_URL=http://localhost:1337
       - DATABASE_URL=postgresql://postgres@postgres:5432/planka
       - SECRET_KEY=notsecretkey
+      - EVOLUTION_INSTANCE=Marketing
+      - EVOLUTION_API_KEY=26115CD7A8CF-436A-A215-A848F368DCDE
+      - EVOLUTION_BASE_ADDRESS=https://evolution-api.sync.com.br
 
       # - LOG_LEVEL=warn
 

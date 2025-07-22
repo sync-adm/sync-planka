@@ -9,6 +9,10 @@ const getCompletedRequests = async ({ page, limit, includeAllFields, listNameCon
     headers,
   );
 
+const getEvolutionGroups = async ({ getParticipants = false }, headers) =>
+  http.get(`/marketing/evolution-groups?getParticipants=${getParticipants}`, null, headers);
+
 export default {
   getCompletedRequests,
+  getEvolutionGroups,
 };

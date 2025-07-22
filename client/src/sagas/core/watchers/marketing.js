@@ -8,5 +8,8 @@ export default function* marketingWatchers() {
     takeEvery(EntryActionTypes.MARKETING_FETCH_COMPLETED_REQUESTS, ({ payload: { data } }) =>
       services.fetchMarketingCompletedRequests(data),
     ),
+    takeEvery(EntryActionTypes.MARKETING_FETCH_EVOLUTION_GROUPS, ({ payload: { data } }) =>
+      services.fetchEvolutionGroups(data),
+    ),
   ]);
 }

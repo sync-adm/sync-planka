@@ -5,6 +5,12 @@ export const fetchMarketingCompletedRequests = (data) => ({
   payload: { data },
 });
 
+export const fetchEvolutionGroups = (data = {}) => ({
+  type: EntryActionTypes.MARKETING_FETCH_EVOLUTION_GROUPS,
+  payload: { data },
+});
+
 export default {
   fetchMarketingCompletedRequests,
+  fetchEvolutionGroups,
 };

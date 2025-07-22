@@ -13,6 +13,7 @@ import styles from './RightSide.module.scss';
 
 const RightSide = React.memo(() => {
   const board = useSelector(selectors.selectCurrentBoard);
+  console.log(board);
   const dispatch = useDispatch();
 
   const handleSelectViewClick = useCallback(
