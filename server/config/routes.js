@@ -182,6 +182,7 @@ module.exports.routes = {
 
   'GET /api/marketing/completed-requests': 'marketing/show',
   'GET /api/marketing/evolution-groups': 'marketing/fetch-groups',
+  'POST /api/marketing/send-message': 'marketing/send-message',
 
   'GET /api/design/new-requests': 'design/show',
 

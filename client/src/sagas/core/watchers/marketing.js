@@ -11,5 +11,8 @@ export default function* marketingWatchers() {
     takeEvery(EntryActionTypes.MARKETING_FETCH_EVOLUTION_GROUPS, ({ payload: { data } }) =>
       services.fetchEvolutionGroups(data),
     ),
+    takeEvery(EntryActionTypes.MARKETING_SEND_WHATSAPP_MESSAGE, ({ payload: { data } }) =>
+      services.sendWhatsAppMessage(data),
+    ),
   ]);
 }

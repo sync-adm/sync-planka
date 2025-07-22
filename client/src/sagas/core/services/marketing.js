@@ -36,7 +36,24 @@ export function* fetchEvolutionGroups(data) {
   }
 }
 
+export function* sendWhatsAppMessage(data) {
+  yield put(actions.sendWhatsAppMessage(data));
+
+  try {
+    const accessToken = yield select(selectors.selectAccessToken);
+
+    const response = yield call(api.sendWhatsAppMessage, data, {
+      Authorization: `Bearer ${accessToken}`,
+    });
+
+    yield put(actions.sendWhatsAppMessageSuccess(response));
+  } catch (error) {
+    yield put(actions.sendWhatsAppMessageFailure(error));
+  }
+}
+
 export default {
   fetchMarketingCompletedRequests,
   fetchEvolutionGroups,
+  sendWhatsAppMessage,
 };

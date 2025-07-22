@@ -12,7 +12,11 @@ const getCompletedRequests = async ({ page, limit, includeAllFields, listNameCon
 const getEvolutionGroups = async ({ getParticipants = false }, headers) =>
   http.get(`/marketing/evolution-groups?getParticipants=${getParticipants}`, null, headers);
 
+const sendWhatsAppMessage = async ({ number, text }, headers) =>
+  http.post('/marketing/send-message', { number, text }, headers);
+
 export default {
   getCompletedRequests,
   getEvolutionGroups,
+  sendWhatsAppMessage,
 };
