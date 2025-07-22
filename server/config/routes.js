@@ -181,6 +181,7 @@ module.exports.routes = {
   'DELETE /api/notification-services/:id': 'notification-services/delete',
 
   'GET /api/marketing/completed-requests': 'marketing/show',
+  'GET /api/marketing/evolution-groups': 'marketing/fetch-groups',
 
   'GET /api/design/new-requests': 'design/show',
 

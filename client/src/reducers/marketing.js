@@ -13,6 +13,11 @@ const initialState = {
       hasMore: false,
     },
   },
+  evolutionGroups: {
+    isFetching: false,
+    error: null,
+    data: [],
+  },
 };
 
 // eslint-disable-next-line default-param-last
@@ -36,6 +41,34 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         isFetching: false,
         error: payload.error,
+      };
+    case ActionTypes.MARKETING_FETCH_EVOLUTION_GROUPS:
+      return {
+        ...state,
+        evolutionGroups: {
+          ...state.evolutionGroups,
+          isFetching: true,
+          error: null,
+        },
+      };
+    case ActionTypes.MARKETING_FETCH_EVOLUTION_GROUPS_SUCCESS:
+      return {
+        ...state,
+        evolutionGroups: {
+          ...state.evolutionGroups,
+          isFetching: false,
+          data: payload.groups || [],
+          error: null,
+        },
+      };
+    case ActionTypes.MARKETING_FETCH_EVOLUTION_GROUPS_ERROR:
+      return {
+        ...state,
+        evolutionGroups: {
+          ...state.evolutionGroups,
+          isFetching: false,
+          error: payload.error,
+        },
       };
     default:
       return state;

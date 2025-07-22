@@ -16,7 +16,6 @@ import { ProjectTypeIcons } from '../../../constants/Icons';
 import SelectTypeStep from './SelectTypeStep';
 
 import styles from './AddProjectModal.module.scss';
-import grupsMock from './groupsMock';
 
 const AddProjectModal = React.memo(() => {
   const [contactViaGroup, setContactViaGroup] = useState(true);
@@ -25,6 +24,11 @@ const AddProjectModal = React.memo(() => {
   );
 
   const { data: defaultData, isSubmitting } = useSelector(selectors.selectProjectCreateForm);
+
+  // Selectors para grupos da Evolution API
+  const evolutionGroups = useSelector(selectors.selectEvolutionGroups);
+  const isLoadingGroups = useSelector(selectors.selectEvolutionGroupsIsFetching);
+  const groupsError = useSelector(selectors.selectEvolutionGroupsError);
 
   const dispatch = useDispatch();
   const [t] = useTranslation();
@@ -123,7 +127,10 @@ const AddProjectModal = React.memo(() => {
 
   useEffect(() => {
     nameFieldRef.current.focus();
-  }, [nameFieldRef]);
+
+    // Buscar grupos da Evolution API quando o modal abre
+    dispatch(entryActions.fetchEvolutionGroups());
+  }, [nameFieldRef, dispatch]);
 
   const SelectTypePopup = usePopup(SelectTypeStep, {
     onOpen: activateClosable,
@@ -136,6 +143,12 @@ const AddProjectModal = React.memo(() => {
       ...prev,
       whatsappTarget: null,
     }));
+  };
+
+  const getGroupsPlaceholder = () => {
+    if (isLoadingGroups) return 'Carregando grupos...';
+    if (groupsError) return 'Erro ao carregar grupos';
+    return 'Digite para buscar um grupo...';
   };
 
   return (
@@ -256,8 +269,10 @@ const AddProjectModal = React.memo(() => {
               label="Selecione o grupo"
               name="whatsappTarget"
               value={data.whatsappTarget}
+              loading={isLoadingGroups}
+              disabled={isLoadingGroups || !!groupsError}
               onChange={(_, { name, value }) => setData((prev) => ({ ...prev, [name]: value }))}
-              options={grupsMock.map((group) => ({
+              options={(evolutionGroups || []).map((group) => ({
                 key: group.id,
                 value: group.id,
                 text: group.subject,
@@ -271,7 +286,7 @@ const AddProjectModal = React.memo(() => {
                       src: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaTTEyIDEzLjVDOS4zNDUxIDEzLjUgNCAxNC44MjI1IDQgMTcuNVYyMEgyMFYxNy41QzIwIDE0LjgyMjUgMTQuNjU0OSAxMy41IDEyIDEzLjVaIiBmaWxsPSIjOTk5Ii8+Cjwvc3ZnPgo=',
                     },
               }))}
-              placeholder="Digite para buscar um grupo..."
+              placeholder={getGroupsPlaceholder()}
               clearable
               noResultsMessage="Nenhum grupo encontrado"
             />
