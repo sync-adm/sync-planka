@@ -25,7 +25,6 @@ const AddProjectModal = React.memo(() => {
 
   const { data: defaultData, isSubmitting } = useSelector(selectors.selectProjectCreateForm);
 
-  // Selectors para grupos da Evolution API
   const evolutionGroups = useSelector(selectors.selectEvolutionGroups);
   const isLoadingGroups = useSelector(selectors.selectEvolutionGroupsIsFetching);
   const groupsError = useSelector(selectors.selectEvolutionGroupsError);
@@ -128,7 +127,6 @@ const AddProjectModal = React.memo(() => {
   useEffect(() => {
     nameFieldRef.current.focus();
 
-    // Buscar grupos da Evolution API quando o modal abre
     dispatch(entryActions.fetchEvolutionGroups());
   }, [nameFieldRef, dispatch]);
 
