@@ -57,7 +57,10 @@ const AddProjectModal = React.memo(() => {
       subdomain: data.subdomain.trim() || null,
       domain: data.domain.trim(),
       integrationType: data.integrationType,
-      whatsappTarget: data.whatsappTarget ? data.whatsappTarget.replace(/\D/g, '') : null,
+      whatsappTarget:
+        data.whatsappTarget && data.whatsappTarget.trim()
+          ? data.whatsappTarget.replace(/\D/g, '')
+          : null,
     };
 
     if (!cleanData.name) {

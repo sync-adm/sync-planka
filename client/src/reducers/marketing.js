@@ -18,6 +18,11 @@ const initialState = {
     error: null,
     data: [],
   },
+  whatsappMessage: {
+    isSending: false,
+    error: null,
+    lastSent: null,
+  },
 };
 
 // eslint-disable-next-line default-param-last
@@ -68,6 +73,42 @@ export default (state = initialState, { type, payload }) => {
           ...state.evolutionGroups,
           isFetching: false,
           error: payload.error,
+        },
+      };
+    case ActionTypes.MARKETING_SEND_WHATSAPP_MESSAGE:
+      return {
+        ...state,
+        whatsappMessage: {
+          ...state.whatsappMessage,
+          isSending: true,
+          error: null,
+        },
+      };
+    case ActionTypes.MARKETING_SEND_WHATSAPP_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        whatsappMessage: {
+          ...state.whatsappMessage,
+          isSending: false,
+          lastSent: payload,
+          error: null,
+        },
+      };
+    case ActionTypes.MARKETING_SEND_WHATSAPP_MESSAGE_ERROR:
+      return {
+        ...state,
+        whatsappMessage: {
+          ...state.whatsappMessage,
+          isSending: false,
+          error: payload.error,
+        },
+      };
+    case ActionTypes.MARKETING_CLEAR_WHATSAPP_MESSAGE_ERROR:
+      return {
+        ...state,
+        whatsappMessage: {
+          ...state.whatsappMessage,
+          error: null,
         },
       };
     default:

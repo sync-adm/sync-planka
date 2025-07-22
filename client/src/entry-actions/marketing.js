@@ -10,7 +10,13 @@ export const fetchEvolutionGroups = (data = {}) => ({
   payload: { data },
 });
 
+export const sendWhatsAppMessage = (data) => ({
+  type: EntryActionTypes.MARKETING_SEND_WHATSAPP_MESSAGE,
+  payload: { data },
+});
+
 export default {
   fetchMarketingCompletedRequests,
   fetchEvolutionGroups,
+  sendWhatsAppMessage,
 };
