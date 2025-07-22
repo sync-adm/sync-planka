@@ -1,10 +1,17 @@
-# DOCS
+# Sync PLanka - DOCS
+
+</br>
+</br>
 
 # Documentação: Como Consumir Endpoints no Projeto Planka
+
+</br>
 
 ## Visão Geral
 
 Este projeto utiliza uma arquitetura Redux + Redux-Saga para gerenciar requisições de API de forma assíncrona e escalável. O fluxo segue um padrão bem definido que garante consistência e facilita a manutenção.
+
+</br>
 
 ## Arquitetura de Requisições
 
@@ -12,9 +19,9 @@ Este projeto utiliza uma arquitetura Redux + Redux-Saga para gerenciar requisiç
 
 ```
 client/src/
-├── api/                    # Definições dos endpoints
-├── actions/               # Actions do Redux
-├── entry-actions/         # Actions de entrada (interações do usuário)
+├── api/                  # Definições dos endpoints
+├── actions/              # Actions do Redux
+├── entry-actions/        # Actions de entrada (interações do usuário)
 ├── sagas/core/
 │   ├── services/         # Lógica de requisições
 │   └── watchers/         # Observadores de actions
@@ -22,6 +29,8 @@ client/src/
 ├── reducers/             # Reducers do Redux
 └── constants/            # Constantes de tipos de actions
 ```
+
+</br>
 
 ## Fluxo de uma Requisição
 
@@ -31,6 +40,8 @@ client/src/
 4. **API** → faz a chamada HTTP
 5. **Reducer** → atualiza o estado
 6. **Componente** → recebe os dados via selector
+
+</br>
 
 ## Passo a Passo: Implementando um Novo Endpoint
 
@@ -324,6 +335,8 @@ const MeuComponente = () => {
 };
 ```
 
+</br>
+
 ## Exemplo Prático: Endpoint de Inventory
 
 Para demonstrar o padrão, foi implementado um endpoint de inventory que:
@@ -430,6 +443,9 @@ Sempre que você precisar **criar/alterar tabelas ou colunas** sem perder dados 
 
 ---
 
+</br>
+</br>
+
 ## 📌 Exemplo Real de Migração: `domain` + `integrationType`
 
 ```js
@@ -468,11 +484,13 @@ docker-compose -f docker-compose-dev.yml restart planka-server
 
 ---
 
+</br>
+</br>
+
 ## 🚀 Contribuindo
 
 - **Siga o padrão acima** para qualquer recurso novo.
 - **Mantenha nomes consistentes** (`Recurso`, `fetchRecurso`, etc.).
-- **Documente seu migration** e seu modelo.
 - **Teste sempre** antes de enviar PR.
 
 ---

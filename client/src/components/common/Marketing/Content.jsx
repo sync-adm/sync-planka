@@ -75,7 +75,7 @@ const Content = React.memo(() => {
                         })}
                       </Table.Cell>
                       <Table.Cell className={styles.waitTimeColumn}>
-                        {getElapsedTime(new Date(card.createdAt).toLocaleDateString())}
+                        {getElapsedTime(card.createdAt)}
                       </Table.Cell>
                       <Table.Cell
                         className={`${styles.requestColumn} ${styles.cardLink}`}
