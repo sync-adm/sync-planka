@@ -50,6 +50,16 @@ const AddProjectModal = React.memo(() => {
   const [nameFieldRef, handleNameFieldRef] = useNestedRef('inputRef');
 
   const submit = useCallback(() => {
+    let processedWhatsappTarget = null;
+
+    if (data.whatsappTarget) {
+      if (contactViaGroup) {
+        processedWhatsappTarget = data.whatsappTarget;
+      } else {
+        processedWhatsappTarget = data.whatsappTarget.replace(/\D/g, '');
+      }
+    }
+
     const cleanData = {
       ...data,
       name: data.name.trim(),
@@ -57,10 +67,7 @@ const AddProjectModal = React.memo(() => {
       subdomain: data.subdomain.trim() || null,
       domain: data.domain.trim(),
       integrationType: data.integrationType,
-      whatsappTarget:
-        data.whatsappTarget && data.whatsappTarget.trim()
-          ? data.whatsappTarget.replace(/\D/g, '')
-          : null,
+      whatsappTarget: processedWhatsappTarget,
     };
 
     if (!cleanData.name) {
@@ -73,7 +80,7 @@ const AddProjectModal = React.memo(() => {
     }
 
     dispatch(entryActions.createProject(cleanData));
-  }, [dispatch, data, nameFieldRef]);
+  }, [dispatch, data, nameFieldRef, contactViaGroup]);
 
   const handleClose = useCallback(() => {
     dispatch(entryActions.closeModal());

@@ -3,9 +3,11 @@ import { Toaster as HotToaster, ToastBar as HotToastBar } from 'react-hot-toast'
 
 import ToastTypes from '../../../constants/ToastTypes';
 import EmptyTrashToast from './EmptyTrashToast';
+import GenericToast from './GenericToast';
 
 const TOAST_BY_TYPE = {
   [ToastTypes.EMPTY_TRASH]: EmptyTrashToast,
+  [ToastTypes.GENERIC_TOAST]: GenericToast,
 };
 
 const Toaster = React.memo(() => (

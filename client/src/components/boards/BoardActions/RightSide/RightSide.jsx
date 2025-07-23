@@ -4,19 +4,19 @@ import { Icon } from 'semantic-ui-react';
 
 import selectors from '../../../../selectors';
 import entryActions from '../../../../entry-actions';
-import { BoardContexts, BoardViews } from '../../../../constants/Enums';
+import { BoardContexts, BoardViews, UserRoles } from '../../../../constants/Enums';
 import { BoardContextIcons, BoardViewIcons } from '../../../../constants/Icons';
 import { usePopup } from '../../../../lib/popup';
 import ActionsStep from './ActionsStep';
-
+import NotificationButton from './NotificationButton';
 import styles from './RightSide.module.scss';
 
 const RightSide = React.memo(() => {
   const board = useSelector(selectors.selectCurrentBoard);
-  const currentProject = useSelector(selectors.selectCurrentProject);
-  const isMessageSending = useSelector(selectors.selectWhatsAppMessageIsSending);
-  const messageError = useSelector(selectors.selectWhatsAppMessageError);
+  const currentUser = useSelector(selectors.selectCurrentUser);
   const dispatch = useDispatch();
+
+  const isAdmin = currentUser?.role === UserRoles.ADMIN;
 
   const handleSelectViewClick = useCallback(
     ({ currentTarget: { value: view } }) => {
@@ -24,23 +24,6 @@ const RightSide = React.memo(() => {
     },
     [dispatch],
   );
-
-  const handleSendNotification = useCallback(() => {
-    if (currentProject?.whatsappTarget) {
-      if (messageError) {
-        dispatch(entryActions.clearWhatsAppMessageError());
-      }
-
-      const message = `🔔 Nova atualização no Sistema de Marketing\n\nUma nova arte foi concluída. Acesse o sistema para verificar as atualizações.`;
-
-      const messageData = {
-        number: currentProject.whatsappTarget,
-        text: message,
-      };
-
-      dispatch(entryActions.sendWhatsAppMessage(messageData));
-    }
-  }, [currentProject, dispatch, messageError]);
 
   const ActionsPopup = usePopup(ActionsStep);
 
@@ -67,19 +50,7 @@ const RightSide = React.memo(() => {
           ))}
         </div>
       </div>
-      {board.name === 'Artes' && currentProject?.whatsappTarget && (
-        <div className={styles.action}>
-          <button
-            type="button"
-            className={styles.button}
-            onClick={handleSendNotification}
-            disabled={isMessageSending}
-            title="Notificar Cliente"
-          >
-            <Icon fitted name={isMessageSending ? 'spinner' : 'bell'} loading={isMessageSending} />
-          </button>
-        </div>
-      )}
+      {isAdmin && <NotificationButton board={board} />}
       <div className={styles.action}>
         <ActionsPopup>
           <button type="button" className={styles.button}>
