@@ -10,7 +10,8 @@ module.exports = {
     number: {
       type: 'string',
       required: true,
-      description: 'Número do WhatsApp (com código do país, sem símbolos)',
+      description:
+        'Número do WhatsApp (com código do país, sem símbolos) ou ID do grupo (formato: ID@g.us)',
       example: '5511950784802',
     },
     text: {
@@ -51,7 +52,9 @@ module.exports = {
       }
 
       const cleanNumber = inputs.number.replace(/\D/g, '');
-      if (!cleanNumber || cleanNumber.length < 10) {
+      const isGroup = inputs.number.includes('@g.us');
+
+      if (!isGroup && (!cleanNumber || cleanNumber.length < 10)) {
         return exits.badRequest({
           message: 'Número de telefone inválido. Deve conter pelo menos 10 dígitos.',
           provided: inputs.number,
@@ -60,14 +63,16 @@ module.exports = {
       }
 
       const messageData = {
-        number: `55${cleanNumber}`,
+        number: isGroup ? inputs.number : `55${cleanNumber}`,
         text: inputs.text.trim(),
       };
 
       const urlString = `${evolutionBaseAddress}/message/sendText/${evolutionInstance}`;
       const url = new URL(urlString);
 
-      sails.log.info(`Enviando mensagem via Evolution API para: ${cleanNumber}`);
+      sails.log.info(
+        `Enviando mensagem via Evolution API para: ${isGroup ? `grupo ${inputs.number}` : `número ${cleanNumber}`}`,
+      );
 
       const responseData = await new Promise((resolve, reject) => {
         const postData = JSON.stringify(messageData);
@@ -137,13 +142,13 @@ module.exports = {
         success: true,
         message: 'Mensagem enviada com sucesso',
         data: responseData.data,
-        sentTo: cleanNumber,
+        sentTo: isGroup ? inputs.number : cleanNumber,
+        type: isGroup ? 'group' : 'number',
         instance: evolutionInstance,
       });
     } catch (error) {
       sails.log.error('Erro ao enviar mensagem via Evolution API:', error);
 
-      // Tratar diferentes tipos de erro
       if (
         error.code === 'ECONNREFUSED' ||
         error.code === 'ETIMEDOUT' ||
@@ -157,7 +162,6 @@ module.exports = {
       }
 
       if (error.response) {
-        // Erro de resposta da API
         const { status, data } = error.response;
 
         if (status === 401) {
@@ -192,7 +196,6 @@ module.exports = {
         });
       }
 
-      // Erro genérico
       return exits.serverError({
         message: 'Erro interno ao enviar mensagem.',
         error: 'INTERNAL_ERROR',
