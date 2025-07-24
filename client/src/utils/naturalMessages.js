@@ -24,21 +24,24 @@ export const createNaturalMessage = (projectName, isGroup = false) => {
 
   if (isGroup) {
     const groupVariations = [
-      `${greeting} pessoal! 👋\n\nTemos uma nova arte da ${projectName} pronta para revisão! ✨`,
-      `${greeting}, pessoal! 🎨\n\nA nova arte da ${projectName} está finalizada e aguardando vocês!`,
-      `${greeting}! 😊\n\nMais uma arte da ${projectName} saiu do forno! Podem revisar quando tiverem um tempinho.`,
-      `${greeting}, galera! 🚀\n\nNova arte da ${projectName} concluída! Podem conferir quando tiverem um tempinho.`,
+      `${greeting}, pessoal! Tudo bem? \nNova arte da ${projectName} concluída! Podem conferir quando tiverem um tempinho!`,
+      `Oie pessoal, tudo bem com vocês? \nPassando pra avisar que a nova arte da ${projectName} foi concluída! Podem revisar quando tiverem um tempinho!`,
+      `${greeting}! 😊 \nMais uma arte da ${projectName} concluída! Quando tiverem um momento, deem uma conferida.`,
+      `${greeting} pessoal, tudo bem? \nArte nova da ${projectName} finalizada com sucesso. Só dar uma conferida quando for possível!`,
+      `Oie, pessoal! Espero que estejam bem! \nA arte nova da ${projectName} foi finalizada. Podem conferir assim que puderem!`,
     ];
 
     return getRandomVariation(groupVariations);
   }
 
+  const personName = projectName.split(' ')[0] ?? '';
+
   const individualVariations = [
-    `${greeting}! 😊\n\nTenho uma ótima notícia: sua nova arte está pronta! ✨\n\nPode acessar o sistema para conferir.`,
-    `${greeting}! 🎨\n\nSua arte foi finalizada com muito carinho! Espero que goste do resultado.\n\nJá está disponível no sistema.`,
-    `${greeting}! 👋\n\nVenho te avisar que sua arte está prontinha! 🚀\n\nDá uma olhada lá no sistema quando puder.`,
-    `${greeting}! ✨\n\nSua nova arte está finalizada!\n\nJá pode conferir no sistema.`,
-    `${greeting}! 😍\n\nTenho certeza que vai amar sua nova arte! Acabamos de finalizar.\n\nEla já está te esperando no sistema.`,
+    `${greeting} ${personName}! Tudo bem? \nSua arte foi finalizada! Pode conferir quando tiver um tempinho.`,
+    `Oie ${personName}, tudo bem com você? \nPassando pra avisar que a sua arte está pronta! Pode revisar quando tiver um tempinho!`,
+    `${greeting} ${personName}! 😊 \nMais uma arte concluída! Quando tiver um momento, dá uma conferida lá!`,
+    `${greeting} ${personName}, tudo bem? \nArte nova prontinha!! Só dar uma conferida quando for possível.`,
+    `Oie, ${personName} Espero que esteja bem! \nArte nova finalizada. Disponível para revisão!`,
   ];
 
   return getRandomVariation(individualVariations);
