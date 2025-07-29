@@ -192,6 +192,8 @@ module.exports.routes = {
   'PATCH /api/project-integrations/:id': 'project-integrations/update',
   'DELETE /api/project-integrations/:id': 'project-integrations/delete',
 
+  'GET /api/projects/:projectId/postiz/integrations': 'postiz/get-integrations',
+
   'GET /preloaded-favicons/*': {
     fn: staticDirServer('/preloaded-favicons', () =>
       path.join(
