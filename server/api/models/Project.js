@@ -135,5 +135,9 @@ module.exports = {
       collection: 'Board',
       via: 'projectId',
     },
+    integrations: {
+      collection: 'ProjectIntegration',
+      via: 'projectId',
+    },
   },
 };
