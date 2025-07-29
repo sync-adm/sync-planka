@@ -20,6 +20,8 @@ module.exports = {
   },
 
   async fn(inputs) {
+    const { currentUser } = this.req;
+
     const projectIntegration = await sails.helpers.projectIntegrations.createOne.with({
       values: {
         integrationType: inputs.integrationType,
@@ -27,7 +29,7 @@ module.exports = {
         disabled: inputs.disabled,
       },
       projectId: inputs.projectId,
-      actorUser: this.req.me,
+      actorUser: currentUser,
       request: this.req,
     });
 

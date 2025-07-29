@@ -7,9 +7,11 @@ module.exports = {
   },
 
   async fn(inputs) {
+    const { currentUser } = this.req;
+
     const projectIntegration = await sails.helpers.projectIntegrations.getOne.with({
       id: inputs.id,
-      actorUser: this.req.me,
+      actorUser: currentUser,
     });
 
     return {

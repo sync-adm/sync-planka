@@ -13,6 +13,8 @@ module.exports = {
   },
 
   async fn(inputs) {
+    const { currentUser } = this.req;
+
     const values = {};
 
     if (inputs.config !== undefined) {
@@ -26,7 +28,7 @@ module.exports = {
     const projectIntegration = await sails.helpers.projectIntegrations.updateOne.with({
       id: inputs.id,
       values,
-      actorUser: this.req.me,
+      actorUser: currentUser,
       request: this.req,
     });
 
