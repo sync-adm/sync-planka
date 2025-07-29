@@ -28,10 +28,13 @@ exports.up = async function (knex) {
 
     table.boolean('disabled').notNullable().defaultTo(false);
     table.jsonb('config').notNullable().defaultTo('{}');
-    table.timestamps(true, true);
+
+    table.timestamp('created_at', true);
+    table.timestamp('updated_at', true);
 
     table.index('project_id');
     table.index(['project_id', 'integration_type']);
+    table.unique(['project_id', 'integration_type']);
   });
 };
 

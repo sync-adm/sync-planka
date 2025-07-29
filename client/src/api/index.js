@@ -5,6 +5,7 @@ import accessTokens from './access-tokens';
 import users from './users';
 import projects from './projects';
 import projectManagers from './project-managers';
+import projectIntegrations from './project-integrations';
 import backgroundImages from './background-images';
 import baseCustomFieldGroups from './base-custom-field-groups';
 import boards from './boards';
@@ -37,6 +38,7 @@ export default {
   ...users,
   ...projects,
   ...projectManagers,
+  ...projectIntegrations,
   ...backgroundImages,
   ...baseCustomFieldGroups,
   ...boards,

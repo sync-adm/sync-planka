@@ -64,12 +64,10 @@
     }
   }
 
-  .activeIntegrations {
-    padding: 20px;
-    text-align: center;
-    color: #6c757d;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    border: 2px dashed #dee2e6;
+  .integrationCard {
+    :global(.ui.card) {
+      position: relative !important;
+    }
   }
+
 }

@@ -54,4 +54,15 @@ module.exports = {
   },
 
   tableName: 'project_integrations',
+
+  createdAt: {
+    type: 'number',
+    autoCreatedAt: true,
+    columnName: 'created_at',
+  },
+  updatedAt: {
+    type: 'number',
+    autoUpdatedAt: true,
+    columnName: 'updated_at',
+  },
 };

@@ -140,7 +140,22 @@ export default {
       saveIntegration: 'Salvar Integração',
       activeIntegrations: 'Integrações Ativas',
       noActiveIntegrations: 'Nenhuma integração ativa no momento.',
+      noActiveIntegrationsDescription:
+        'Adicione integrações para gerenciar suas contas de redes sociais.',
       errorLoadingIntegrations: 'Erro ao carregar integrações do Postiz',
+      errorLoadingActiveIntegrations: 'Erro ao carregar integrações ativas',
+      loadingActiveIntegrations: 'Carregando integrações ativas...',
+      integrationActive: 'Ativa',
+      integrationDisabled: 'Desabilitada',
+      unknownIntegration: 'Integração Desconhecida',
+      deleteIntegration: 'Excluir Integração',
+      deleteIntegrationConfirmation:
+        'Tem certeza de que deseja excluir a integração "{{name}}"? Esta ação não pode ser desfeita.',
+      enable: 'Ativar',
+      disable: 'Desativar',
+      loading: 'Carregando',
+      cancel: 'Cancelar',
+      delete: 'Excluir',
       error: 'Erro',
       preferences: 'Preferências',
       pressPasteShortcutToAddAttachmentFromClipboard:

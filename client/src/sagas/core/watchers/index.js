@@ -5,6 +5,7 @@ import modals from './modals';
 import users from './users';
 import projects from './projects';
 import projectManagers from './project-managers';
+import projectIntegrationsWatchers from './project-integrations';
 import backgroundImages from './background-images';
 import baseCustomFieldGroups from './base-custom-field-groups';
 import boards from './boards';
@@ -35,6 +36,7 @@ export default [
   users,
   projects,
   projectManagers,
+  projectIntegrationsWatchers,
   backgroundImages,
   baseCustomFieldGroups,
   boards,

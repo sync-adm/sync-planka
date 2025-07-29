@@ -71,15 +71,6 @@ module.exports = {
       );
     });
 
-    sails.helpers.utils.sendWebhooks.with({
-      event: 'projectIntegrationCreate',
-      buildData: () => ({
-        item: projectIntegration,
-        project,
-      }),
-      user: actorUser,
-    });
-
     return projectIntegration;
   },
 };
