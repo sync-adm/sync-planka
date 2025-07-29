@@ -73,17 +73,10 @@ const IntegrationsPane = React.memo(() => {
       return;
     }
 
-    console.log('Integração selecionada:', {
-      id: selectedIntegrationData.value,
-      text: selectedIntegrationData.text,
-      description: selectedIntegrationData.description,
-      projectId: project?.id,
-    });
-
     setData(DEFAULT_DATA);
 
     // TODO: Implementar salvamento real da integração
-  }, [selectedIntegrationData, project?.id, setData]);
+  }, [selectedIntegrationData, setData]);
 
   const handleIntegrationChange = useCallback(
     (_, { name, value }) => {
@@ -104,8 +97,8 @@ const IntegrationsPane = React.memo(() => {
 
       {postizIntegrationsError && (
         <Message negative>
-          <Message.Header>Erro</Message.Header>
-          <p>{postizIntegrationsError.message || 'Erro ao carregar integrações do Postiz'}</p>
+          <Message.Header>{t('common.error')}</Message.Header>
+          <p>{postizIntegrationsError.message || t('common.errorLoadingIntegrations')}</p>
         </Message>
       )}
 
@@ -115,30 +108,30 @@ const IntegrationsPane = React.memo(() => {
           search
           selection
           loading={postizIntegrationsIsFetching}
-          label="Selecionar Integração do Postiz"
+          label={t('common.selectPostizIntegration')}
           name="selectedIntegration"
           value={data.selectedIntegration}
           onChange={handleIntegrationChange}
           options={integrationOptions}
           placeholder={
             postizIntegrationsIsFetching
-              ? 'Carregando integrações...'
-              : 'Digite para buscar uma integração...'
+              ? t('common.loadingIntegrations')
+              : t('common.searchIntegration')
           }
           clearable
-          noResultsMessage="Nenhuma integração encontrada"
+          noResultsMessage={t('common.noIntegrationsFound')}
           disabled={postizIntegrationsIsFetching || integrationOptions.length === 0}
         />
 
         {selectedIntegrationData && (
           <div className={styles.selectedIntegration}>
-            <Header as="h5">Integração Selecionada:</Header>
+            <Header as="h5">{t('common.integrationSelected')}</Header>
             <p>
-              <strong>Nome:</strong> {selectedIntegrationData.text}
+              <strong>{t('common.name')}:</strong> {selectedIntegrationData.text}
             </p>
             {selectedIntegrationData.description && (
               <p>
-                <strong>Descrição:</strong> {selectedIntegrationData.description}
+                <strong>{t('common.description')}:</strong> {selectedIntegrationData.description}
               </p>
             )}
           </div>
@@ -147,7 +140,7 @@ const IntegrationsPane = React.memo(() => {
         <Form.Field style={{ textAlign: 'right', marginTop: '20px' }}>
           <Button
             positive
-            content="Salvar Integração"
+            content={t('common.saveIntegration')}
             disabled={!selectedIntegrationData || postizIntegrationsIsFetching}
             onClick={handleSave}
           />
@@ -155,11 +148,11 @@ const IntegrationsPane = React.memo(() => {
       </Form>
 
       <Divider horizontal>
-        <Header as="h4">Integrações Ativas</Header>
+        <Header as="h4">{t('common.activeIntegrations')}</Header>
       </Divider>
 
       <div className={styles.activeIntegrations}>
-        <p>Nenhuma integração ativa no momento.</p>
+        <p>{t('common.noActiveIntegrations')}</p>
       </div>
     </Tab.Pane>
   );
