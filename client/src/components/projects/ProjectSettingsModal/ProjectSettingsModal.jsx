@@ -10,6 +10,7 @@ import GeneralPane from './GeneralPane';
 import ManagersPane from './ManagersPane';
 import BackgroundPane from './BackgroundPane';
 import BaseCustomFieldGroupsPane from './BaseCustomFieldGroupsPane';
+import IntegrationsPane from './IntegrationsPane';
 
 import styles from './ProjectSettingsModal.module.scss';
 
@@ -58,6 +59,12 @@ const ProjectSettingsModal = React.memo(() => {
           context: 'title',
         }),
         render: () => <BaseCustomFieldGroupsPane />,
+      },
+      {
+        menuItem: t('common.integrations', {
+          context: 'title',
+        }),
+        render: () => <IntegrationsPane />,
       },
     );
   }

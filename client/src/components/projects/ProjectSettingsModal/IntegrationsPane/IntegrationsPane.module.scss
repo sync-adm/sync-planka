@@ -1,0 +1,16 @@
+:global(#app) {
+  .firstDivider {
+    margin-top: 0;
+  }
+
+  .wrapper {
+    border: none;
+    box-shadow: none;
+  }
+
+  .placeholder {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+  }
+}

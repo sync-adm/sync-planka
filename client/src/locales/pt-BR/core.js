@@ -129,6 +129,9 @@ export default {
       optional_inline: 'opcional',
       organization: 'Organização',
       phone: 'Telefone',
+      integrations: 'Integrações',
+      integrationsComingSoon: 'Integrações de redes sociais em breve...',
+      socialNetworks: 'Redes Sociais',
       preferences: 'Preferências',
       pressPasteShortcutToAddAttachmentFromClipboard:
         'Dica: pressione Ctrl-V (Cmd-V no Mac) para adicionar um anexo da área de transferência.',

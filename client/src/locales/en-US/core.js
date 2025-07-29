@@ -227,6 +227,9 @@ export default {
       organization: 'Organization',
       others: 'Others',
       phone: 'Phone',
+      integrations: 'Integrations',
+      integrationsComingSoon: 'Social media integrations coming soon...',
+      socialNetworks: 'Social Networks',
       plankaUsesAppriseToSendNotificationsToOver100PopularServices:
         'SYNC uses <1><0>Apprise</0></1> to send notifications to over 100 popular services.',
       preferences: 'Preferences',
