@@ -27,6 +27,7 @@ import notificationServices from './notification-services';
 import marketing from './marketing';
 import design from './design';
 import inventory from './inventory';
+import postizIntegrations from './postiz-integrations';
 
 export { http, socket };
 
@@ -58,4 +59,5 @@ export default {
   ...marketing,
   ...design,
   ...inventory,
+  ...postizIntegrations,
 };

@@ -10,6 +10,7 @@ import ui from './ui';
 import marketing from './marketing';
 import design from './design';
 import inventory from './inventory';
+import postizIntegrations from './postiz-integrations';
 
 export default combineReducers({
   router,
@@ -22,4 +23,5 @@ export default combineReducers({
   marketing,
   design,
   inventory,
+  postizIntegrations,
 });
