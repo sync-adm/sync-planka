@@ -184,6 +184,8 @@ module.exports.routes = {
   'GET /api/marketing/evolution-groups': 'marketing/fetch-groups',
   'POST /api/marketing/send-message': 'marketing/send-message',
 
+  'POST /api/webhook/instagram/posts': 'instagram-webhook/receive-posts',
+
   'GET /api/design/new-requests': 'design/show',
 
   'GET /preloaded-favicons/*': {
