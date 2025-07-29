@@ -20,13 +20,7 @@ module.exports = {
 
   async fn(inputs, exits) {
     try {
-      const requestData = this.req.body;
-
-      let posts = Array.isArray(requestData) ? requestData : [];
-
-      if (!Array.isArray(requestData) && requestData.body && Array.isArray(requestData.body)) {
-        posts = requestData.body;
-      }
+      const posts = this.req.body;
 
       if (posts.length === 0) {
         return exits.badRequest({
