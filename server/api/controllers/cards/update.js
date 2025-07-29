@@ -221,6 +221,18 @@ module.exports = {
       throw Errors.CARD_NOT_FOUND;
     }
 
+    const postizIntegrationId = project.whatsappTarget; // TODO: Adicionar campo expecifico no DB, estou usando o whatsappTarget apenas para testes
+
+    const cardAttachments = await Attachment.qm.getByCardId(card.id);
+
+    if (nextList.name.includes('Conclu')) {
+      await sails.helpers.utils.handleAttachmentsForPublish(
+        cardAttachments,
+        card,
+        postizIntegrationId,
+      );
+    }
+
     return {
       item: card,
     };
