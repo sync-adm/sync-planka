@@ -244,11 +244,10 @@ module.exports = {
           cardAttachments,
           card,
           instagramIntegration,
-          project.id,
+          project,
         );
       } catch (error) {
         sails.log.error('Error publishing to social media:', error);
-        // Don't fail the card update if social media publishing fails
       }
     }
 

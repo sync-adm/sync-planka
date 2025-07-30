@@ -1,0 +1,14 @@
+:global(#app) {
+  .container {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .variableButton {
+    margin: 0px;
+    padding: 3px 5px;
+    min-height: 10px;
+  }
+}

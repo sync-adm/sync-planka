@@ -1,16 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Card, Image, Button } from 'semantic-ui-react';
 
-import integrationsStyles from './IntegrationsPane.module.scss';
-import styles from './IntegrationCard.module.scss';
+import styles from '../IntegrationsPane.module.scss';
 
 function IntegrationCard({ integration, onToggle, onDelete }) {
   const [t] = useTranslation();
 
   return (
-    <Card key={integration.id} fluid className={styles.card}>
+    <Card
+      key={integration.id}
+      className={styles.integrationCard}
+      fluid
+      style={{ marginBottom: '10px' }}
+    >
       <Card.Content>
         <Image
           floated="left"
@@ -22,9 +25,15 @@ function IntegrationCard({ integration, onToggle, onDelete }) {
           avatar
         />
         <div
-          className={integrationsStyles.statusIndicator}
+          className={styles.statusIndicator}
           style={{
             backgroundColor: integration.disabled ? '#f2711c' : '#21ba45',
+            width: '12px',
+            height: '12px',
+            borderRadius: '50%',
+            position: 'absolute',
+            top: '15px',
+            right: '15px',
           }}
         />
         <Card.Header>{integration.config?.name || t('common.unknownIntegration')}</Card.Header>
@@ -34,7 +43,7 @@ function IntegrationCard({ integration, onToggle, onDelete }) {
             {integration.config?.profile ? `@${integration.config.profile}` : ''}
           </span>
           {integration.integrationType === 'instagram' && integration.config?.publishSettings && (
-            <div className={styles.configInfo}>
+            <div style={{ marginTop: '8px', fontSize: '0.9em', color: '#666' }}>
               <strong>{t('common.enabled')}:</strong>{' '}
               {[
                 integration.config.publishSettings.enableFeed && 'Feed',
@@ -44,7 +53,7 @@ function IntegrationCard({ integration, onToggle, onDelete }) {
                 .filter(Boolean)
                 .join(', ') || t('common.none')}
               {integration.config.publishSettings.defaultDescription && (
-                <div className={styles.settingsItem}>
+                <div style={{ marginTop: '4px' }}>
                   <strong>{t('common.defaultDescription')}:</strong>{' '}
                   <em>
                     {integration.config.publishSettings.defaultDescription.length > 50
@@ -70,26 +79,5 @@ function IntegrationCard({ integration, onToggle, onDelete }) {
     </Card>
   );
 }
-
-IntegrationCard.propTypes = {
-  integration: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
-    integrationType: PropTypes.string,
-    config: PropTypes.shape({
-      name: PropTypes.string,
-      picture: PropTypes.string,
-      profile: PropTypes.string,
-      publishSettings: PropTypes.shape({
-        enableFeed: PropTypes.bool,
-        enableReels: PropTypes.bool,
-        enableStory: PropTypes.bool,
-        defaultDescription: PropTypes.string,
-      }),
-    }),
-  }).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};
 
 export default IntegrationCard;

@@ -1,22 +1,24 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react';
+import React, { useCallback, useState, useEffect, useMemo, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Divider, Form, Header, Tab, Message, Confirm } from 'semantic-ui-react';
+import { Divider, Header, Tab, Message, Confirm } from 'semantic-ui-react';
 
 import selectors from '../../../../selectors';
 import entryActions from '../../../../entry-actions';
 import actions from '../../../../actions';
 import { useForm } from '../../../../hooks';
-import IntegrationSelector from './IntegrationSelector';
-import IntegrationSettings from './IntegrationSettings';
-import ActiveIntegrationsList from './ActiveIntegrationsList';
 import styles from './IntegrationsPane.module.scss';
+
+// Componentes
+import IntegrationForm from './IntegrationForm';
+import ActiveIntegrationsList from './ActiveIntegrationsList';
 
 const DEFAULT_DATA = {
   selectedIntegration: '',
   enableFeed: true,
   enableReels: true,
   enableStory: true,
+  defaultDescription: '',
 };
 
 const IntegrationsPane = React.memo(() => {
@@ -27,6 +29,7 @@ const IntegrationsPane = React.memo(() => {
   const [integrationOptions, setIntegrationOptions] = useState([]);
   const [selectedIntegrationData, setSelectedIntegrationData] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const descriptionRef = useRef(null);
 
   const selectProjectById = useMemo(() => selectors.makeSelectProjectById(), []);
   const currentProject = useSelector(selectors.selectCurrentProject);
@@ -100,6 +103,7 @@ const IntegrationsPane = React.memo(() => {
           enableFeed: data.enableFeed,
           enableReels: data.enableReels,
           enableStory: data.enableStory,
+          defaultDescription: data.defaultDescription.trim() || null,
         },
       },
       integrationType: selectedIntegrationData.label || 'instagram',
@@ -119,20 +123,44 @@ const IntegrationsPane = React.memo(() => {
     data.enableFeed,
     data.enableReels,
     data.enableStory,
+    data.defaultDescription,
   ]);
 
   const handleIntegrationChange = useCallback(
-    (name, value) => {
+    (_, { name, value }) => {
       setData((prev) => ({ ...prev, [name]: value }));
+      if (projectIntegrationCreateError) {
+        dispatch(actions.clearProjectIntegrationCreateError());
+      }
+    },
+    [setData, projectIntegrationCreateError, dispatch],
+  );
+
+  const handleCheckboxChange = useCallback(
+    (_, { name, checked }) => {
+      setData((prev) => ({ ...prev, [name]: checked }));
     },
     [setData],
   );
 
-  const handleCheckboxChange = useCallback(
-    (name, checked) => {
-      setData((prev) => ({ ...prev, [name]: checked }));
+  const insertVariable = useCallback(
+    (variable) => {
+      const textarea = descriptionRef.current;
+      if (textarea) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const currentValue = data.defaultDescription;
+        const newValue = `${currentValue.substring(0, start)}[${variable}]${currentValue.substring(end)}`;
+
+        setData((prev) => ({ ...prev, defaultDescription: newValue }));
+
+        setTimeout(() => {
+          textarea.focus();
+          textarea.setSelectionRange(start + variable.length + 2, start + variable.length + 2);
+        }, 0);
+      }
     },
-    [setData],
+    [data.defaultDescription, setData],
   );
 
   const handleDeleteIntegration = useCallback((integration) => {
@@ -173,34 +201,34 @@ const IntegrationsPane = React.memo(() => {
         </Message>
       )}
 
-      <Form>
-        <IntegrationSelector
-          loading={postizIntegrationsIsFetching}
-          value={data.selectedIntegration}
-          options={integrationOptions}
-          error={projectIntegrationCreateError}
-          disabled={postizIntegrationsIsFetching || integrationOptions.length === 0}
-          onChange={handleIntegrationChange}
-        />
-
-        <IntegrationSettings
-          selectedIntegration={selectedIntegrationData}
-          data={data}
-          disabled={!selectedIntegrationData || postizIntegrationsIsFetching}
-          onCheckboxChange={handleCheckboxChange}
-          onSave={handleSave}
-        />
-      </Form>
+      <IntegrationForm
+        data={data}
+        integrationOptions={integrationOptions}
+        selectedIntegrationData={selectedIntegrationData}
+        postizIntegrationsIsFetching={postizIntegrationsIsFetching}
+        projectIntegrationCreateError={projectIntegrationCreateError}
+        onIntegrationChange={handleIntegrationChange}
+        onCheckboxChange={handleCheckboxChange}
+        onSave={handleSave}
+        descriptionRef={descriptionRef}
+        onInsertVariable={insertVariable}
+      />
 
       <Divider horizontal>
         <Header as="h4">{t('common.activeIntegrations')}</Header>
       </Divider>
 
       <div className={styles.activeIntegrations}>
+        {projectIntegrationsError && (
+          <Message negative>
+            <Message.Header>{t('common.error')}</Message.Header>
+            <p>{projectIntegrationsError.message || t('common.errorLoadingActiveIntegrations')}</p>
+          </Message>
+        )}
+
         <ActiveIntegrationsList
-          integrations={projectIntegrations}
-          loading={projectIntegrationsLoading}
-          error={projectIntegrationsError}
+          projectIntegrations={projectIntegrations}
+          projectIntegrationsLoading={projectIntegrationsLoading}
           onToggleIntegration={handleToggleIntegration}
           onDeleteIntegration={handleDeleteIntegration}
         />

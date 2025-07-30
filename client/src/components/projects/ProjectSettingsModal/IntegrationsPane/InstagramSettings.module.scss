@@ -1,0 +1,50 @@
+:global(#app) {
+  .container {
+    margin-top: 15px;
+  }
+
+  .fieldContainer {
+    margin-top: 15px;
+  }
+
+  .labelContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .helpIcon {
+    margin-left: 5px;
+    cursor: help;
+    color: #2185d0;
+  }
+
+  .defaultDescriptionField {
+    min-height: 80px;
+    resize: vertical;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    border-radius: 0.28571429rem;
+    background: #fff;
+    outline: none;
+    color: rgba(0, 0, 0, 0.87);
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0.67857143em 1em;
+    font-size: 1em;
+    line-height: 1.21428571em;
+    transition: color 0.1s ease, border-color 0.1s ease;
+    width: 100%;
+
+    &:focus {
+      border-color: #85b7d9;
+      background: #fff;
+      color: rgba(0, 0, 0, 0.95);
+      box-shadow: 0 0 0 1px #85b7d9;
+    }
+  }
+
+  .helpText {
+    color: #666;
+    font-size: 0.85em;
+  }
+}

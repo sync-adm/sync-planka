@@ -15,9 +15,9 @@ module.exports = {
       description: 'ProjectIntegration record with Postiz configuration',
       required: true,
     },
-    projectId: {
-      type: 'string',
-      description: 'Project ID for logging purposes',
+    project: {
+      type: 'ref',
+      description: 'Project record for logging purposes',
       required: true,
     },
   },
@@ -31,17 +31,10 @@ module.exports = {
   sync: false,
 
   async fn(inputs) {
-    const { card, postizIntegration, projectId } = inputs;
-
-    const cardNameWithoutPlate = sails.helpers.utils.formatVehicleName(card.name);
-
-    const { instagramFeedAttachment, instagramStoryAttachment } =
-      sails.helpers.utils.filterAttachmentsBySize(inputs.attachments);
-
-    const results = [];
+    const { card, postizIntegration, project } = inputs;
 
     if (!postizIntegration || !postizIntegration.config || !postizIntegration.config.id) {
-      sails.log.warn('No valid Postiz integration found for project:', projectId);
+      sails.log.warn('No valid Postiz integration found for project:', project.id);
       return { success: false, error: 'No integration configured' };
     }
 
@@ -52,75 +45,34 @@ module.exports = {
       enableStory: true,
     };
 
-    if (instagramFeedAttachment && publishSettings.enableFeed) {
-      const feedImageUrl = sails.helpers.utils.buildStorjUrl(instagramFeedAttachment);
-      if (feedImageUrl) {
-        const feedResult = await sails.helpers.utils.postToPostiz(
-          feedImageUrl,
-          `${cardNameWithoutPlate} #veiculos #carros #automoveis`,
-          'post',
-          postizIntegrationId,
-        );
-        results.push({ type: 'feed', ...feedResult });
-      }
+    const vehicleId = sails.helpers.utils.extractVehicleId(card.description);
+
+    let vehicleData = null;
+    if (vehicleId && project.subdomain) {
+      vehicleData = await sails.helpers.utils.fetchVehicleData(vehicleId, project.subdomain);
+    } else if (!project.subdomain) {
+      sails.log.warn('No project subdomain available for inventory lookup');
     }
 
-    if (instagramStoryAttachment && publishSettings.enableStory) {
-      const storyImageUrl = sails.helpers.utils.buildStorjUrl(instagramStoryAttachment);
-      if (storyImageUrl) {
-        const storyResult = await sails.helpers.utils.postToPostiz(
-          storyImageUrl,
-          `${cardNameWithoutPlate} #veiculos #carros #automoveis`,
-          'story',
-          postizIntegrationId,
-        );
-        results.push({ type: 'story', ...storyResult });
-      }
+    let baseDescription = publishSettings.defaultDescription
+      ? publishSettings.defaultDescription.trim()
+      : sails.helpers.utils.formatVehicleName(card.name);
+
+    if (publishSettings.defaultDescription) {
+      baseDescription = sails.helpers.utils.replaceVehicleVariables(baseDescription, vehicleData);
     }
 
-    let reelVideoAttachment = null;
-    let reelImageUrl = null;
-
-    if (instagramStoryAttachment && publishSettings.enableReels) {
-      try {
-        reelVideoAttachment = await sails.helpers.utils.convertImageToReel(
-          instagramStoryAttachment,
-          card,
-        );
-
-        if (reelVideoAttachment) {
-          const reelVideoUrl = sails.helpers.utils.buildStorjUrl(reelVideoAttachment);
-
-          if (reelVideoUrl) {
-            const reelResult = await sails.helpers.utils.postToPostiz(
-              reelVideoUrl,
-              `${cardNameWithoutPlate} #veiculos #carros #automoveis #reels`,
-              'post',
-              postizIntegrationId,
-            );
-            results.push({ type: 'reel', ...reelResult });
-            reelImageUrl = reelVideoUrl;
-          }
-        }
-      } catch (error) {
-        sails.log.error('Erro ao criar/postar reel:', error);
-        results.push({
-          type: 'reel',
-          success: false,
-          error: `Failed to create reel: ${error.message}`,
-        });
-      }
-    }
+    const publishResults = await sails.helpers.utils.publishToInstagram.with({
+      attachments: inputs.attachments,
+      baseDescription,
+      publishSettings,
+      postizIntegrationId,
+      card,
+    });
 
     return {
-      card: cardNameWithoutPlate,
-      results,
-      instagramFeedAttachment,
-      instagramStoryAttachment,
-      instagramReelAttachment: reelVideoAttachment,
-      instagramFeedImageUrl: sails.helpers.utils.buildStorjUrl(instagramFeedAttachment),
-      instagramStoryImageUrl: sails.helpers.utils.buildStorjUrl(instagramStoryAttachment),
-      instagramReelVideoUrl: reelImageUrl,
+      card: baseDescription,
+      ...publishResults,
     };
   },
 };
