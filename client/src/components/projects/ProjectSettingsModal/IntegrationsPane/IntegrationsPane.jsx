@@ -144,13 +144,18 @@ const IntegrationsPane = React.memo(() => {
 
     if (projectIntegrations && projectIntegrations.length > 0) {
       return (
-        <Card.Group>
+        <div>
           {projectIntegrations.map((integration) => (
-            <Card key={integration.id} className={styles.integrationCard}>
+            <Card
+              key={integration.id}
+              className={styles.integrationCard}
+              fluid
+              style={{ marginBottom: '10px' }}
+            >
               <Card.Content>
                 <Image
                   floated="left"
-                  size="mini"
+                  size="tiny"
                   src={
                     integration.config?.picture ||
                     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaTTEyIDEzLjVDOS4zNDUxIDEzLjUgNCAxNC44MjI1IDQgMTcuNVYyMEgyMFYxNy41QzIwIDE0LjgyMjUgMTQuNjU0OSAxMy41IDEyIDEzLjVaIiBmaWxsPSIjOTk5Ii8+Cjwvc3ZnPgo='
@@ -195,7 +200,7 @@ const IntegrationsPane = React.memo(() => {
               </Card.Content>
             </Card>
           ))}
-        </Card.Group>
+        </div>
       );
     }
 
