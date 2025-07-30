@@ -10,9 +10,9 @@ module.exports = {
       description: 'Card record to associate with the attachments',
       required: true,
     },
-    postizIntegrationId: {
-      type: 'string',
-      description: 'Postiz integration ID to use for publishing',
+    postizIntegration: {
+      type: 'ref',
+      description: 'ProjectIntegration record with Postiz configuration',
       required: true,
     },
     projectId: {
@@ -31,7 +31,7 @@ module.exports = {
   sync: false,
 
   async fn(inputs) {
-    const { card, postizIntegrationId, projectId } = inputs;
+    const { card, postizIntegration, projectId } = inputs;
 
     const cardNameWithoutPlate = sails.helpers.utils.formatVehicleName(card.name);
 
@@ -40,12 +40,19 @@ module.exports = {
 
     const results = [];
 
-    if (!postizIntegrationId) {
-      sails.log.warn('No Postiz integration ID found for project:', projectId);
+    if (!postizIntegration || !postizIntegration.config || !postizIntegration.config.id) {
+      sails.log.warn('No valid Postiz integration found for project:', projectId);
       return { success: false, error: 'No integration configured' };
     }
 
-    if (instagramFeedAttachment) {
+    const postizIntegrationId = postizIntegration.config.id;
+    const publishSettings = postizIntegration.config.publishSettings || {
+      enableFeed: true,
+      enableReels: true,
+      enableStory: true,
+    };
+
+    if (instagramFeedAttachment && publishSettings.enableFeed) {
       const feedImageUrl = sails.helpers.utils.buildStorjUrl(instagramFeedAttachment);
       if (feedImageUrl) {
         const feedResult = await sails.helpers.utils.postToPostiz(
@@ -58,7 +65,7 @@ module.exports = {
       }
     }
 
-    if (instagramStoryAttachment) {
+    if (instagramStoryAttachment && publishSettings.enableStory) {
       const storyImageUrl = sails.helpers.utils.buildStorjUrl(instagramStoryAttachment);
       if (storyImageUrl) {
         const storyResult = await sails.helpers.utils.postToPostiz(
@@ -74,7 +81,7 @@ module.exports = {
     let reelVideoAttachment = null;
     let reelImageUrl = null;
 
-    if (instagramStoryAttachment) {
+    if (instagramStoryAttachment && publishSettings.enableReels) {
       try {
         reelVideoAttachment = await sails.helpers.utils.convertImageToReel(
           instagramStoryAttachment,

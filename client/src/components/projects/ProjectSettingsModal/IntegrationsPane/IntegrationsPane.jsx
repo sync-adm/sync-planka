@@ -11,6 +11,7 @@ import {
   Card,
   Image,
   Confirm,
+  Checkbox,
 } from 'semantic-ui-react';
 
 import selectors from '../../../../selectors';
@@ -21,6 +22,9 @@ import styles from './IntegrationsPane.module.scss';
 
 const DEFAULT_DATA = {
   selectedIntegration: '',
+  enableFeed: true,
+  enableReels: true,
+  enableStory: true,
 };
 
 const IntegrationsPane = React.memo(() => {
@@ -91,7 +95,6 @@ const IntegrationsPane = React.memo(() => {
       return;
     }
 
-    // Limpar erro anterior antes de tentar criar
     if (projectIntegrationCreateError) {
       dispatch(actions.clearProjectIntegrationCreateError());
     }
@@ -101,6 +104,11 @@ const IntegrationsPane = React.memo(() => {
     const integrationData = {
       config: {
         ...integration,
+        publishSettings: {
+          enableFeed: data.enableFeed,
+          enableReels: data.enableReels,
+          enableStory: data.enableStory,
+        },
       },
       integrationType: selectedIntegrationData.label || 'instagram',
       disabled: false,
@@ -116,17 +124,26 @@ const IntegrationsPane = React.memo(() => {
     currentProject?.id,
     setData,
     projectIntegrationCreateError,
+    data.enableFeed,
+    data.enableReels,
+    data.enableStory,
   ]);
 
   const handleIntegrationChange = useCallback(
     (_, { name, value }) => {
       setData((prev) => ({ ...prev, [name]: value }));
-      // Limpar erro de criação quando o usuário muda a seleção
       if (projectIntegrationCreateError) {
         dispatch(actions.clearProjectIntegrationCreateError());
       }
     },
     [setData, projectIntegrationCreateError, dispatch],
+  );
+
+  const handleCheckboxChange = useCallback(
+    (_, { name, checked }) => {
+      setData((prev) => ({ ...prev, [name]: checked }));
+    },
+    [setData],
   );
 
   const handleDeleteIntegration = useCallback((integration) => {
@@ -200,6 +217,19 @@ const IntegrationsPane = React.memo(() => {
                     {integration.integrationType?.toUpperCase()} •{' '}
                     {integration.config?.profile ? `@${integration.config.profile}` : ''}
                   </span>
+                  {integration.integrationType === 'instagram' &&
+                    integration.config?.publishSettings && (
+                      <div style={{ marginTop: '8px', fontSize: '0.9em', color: '#666' }}>
+                        <strong>{t('common.enabled')}:</strong>{' '}
+                        {[
+                          integration.config.publishSettings.enableFeed && 'Feed',
+                          integration.config.publishSettings.enableReels && 'Reels',
+                          integration.config.publishSettings.enableStory && 'Story',
+                        ]
+                          .filter(Boolean)
+                          .join(', ') || t('common.none')}
+                      </div>
+                    )}
                 </Card.Meta>
               </Card.Content>
               <Card.Content extra>
@@ -290,6 +320,36 @@ const IntegrationsPane = React.memo(() => {
               <p>
                 <strong>{t('common.description')}:</strong> {selectedIntegrationData.description}
               </p>
+            )}
+
+            {selectedIntegrationData.label === 'instagram' && (
+              <div style={{ marginTop: '15px' }}>
+                <Header as="h6">{t('common.automaticPublishingSettings')}</Header>
+                <Form.Field>
+                  <Checkbox
+                    name="enableFeed"
+                    label={t('common.enableFeedPosts')}
+                    checked={data.enableFeed}
+                    onChange={handleCheckboxChange}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Checkbox
+                    name="enableReels"
+                    label={t('common.enableReelsPosts')}
+                    checked={data.enableReels}
+                    onChange={handleCheckboxChange}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Checkbox
+                    name="enableStory"
+                    label={t('common.enableStoryPosts')}
+                    checked={data.enableStory}
+                    onChange={handleCheckboxChange}
+                  />
+                </Form.Field>
+              </div>
             )}
           </div>
         )}

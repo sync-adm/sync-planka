@@ -1,4 +1,4 @@
-import { all, call, delay, fork, join, put, race, select, take } from 'redux-saga/effects';
+import { all, call, fork, join, put, race, select, take } from 'redux-saga/effects';
 import toast from 'react-hot-toast';
 import { LOCATION_CHANGE_HANDLE } from '../../../lib/redux-router';
 
@@ -12,6 +12,11 @@ import { isListArchiveOrTrash, isListFinite } from '../../../utils/record-helper
 import ActionTypes from '../../../constants/ActionTypes';
 import ToastTypes from '../../../constants/ToastTypes';
 import { BoardViews, ListTypes } from '../../../constants/Enums';
+
+// Toast helper function to work with the project's toast system
+function* showToast(params) {
+  yield call(toast, params);
+}
 
 // eslint-disable-next-line no-underscore-dangle
 const _preloadImage = (url) =>
@@ -235,7 +240,7 @@ export function* handleCardCreate(card) {
 
 export function* updateCard(id, data) {
   let prevListId;
-  let isMovingToCompletedList = false;
+  // const isMovingToCompletedList = false;
 
   if (data.listId) {
     const list = yield select(selectors.selectListById, data.listId);
@@ -243,10 +248,10 @@ export function* updateCard(id, data) {
     const card = yield select(selectors.selectCardById, id);
     const prevList = yield select(selectors.selectListById, card.listId);
 
-    if (list.name.includes('Conclu')) {
-      isMovingToCompletedList = true;
+    if (list && list.name && list.name.includes('Conclu')) {
+      // isMovingToCompletedList = true;
 
-      yield call(toast, {
+      yield call(showToast, {
         type: ToastTypes.GENERIC_TOAST,
         params: {
           type: 'info',
@@ -285,19 +290,19 @@ export function* updateCard(id, data) {
 
   yield put(actions.updateCard.success(card));
 
-  if (isMovingToCompletedList) {
-    yield call(delay, 2000);
+  // if (isMovingToCompletedList) {
+  //   yield call(delay, 2000);
 
-    yield call(toast, {
-      type: ToastTypes.GENERIC_TOAST,
-      params: {
-        type: 'success',
-        title: 'Publicação realizada',
-        message: 'Artes publicadas com sucesso, pode levar até 3 minutos para aparecer na sua rede',
-        icon: 'check circle',
-      },
-    });
-  }
+  //   yield call(showToast, {
+  //     type: ToastTypes.GENERIC_TOAST,
+  //     params: {
+  //       type: 'success',
+  //       title: 'Publicação realizada',
+  //       message: 'Artes publicadas com sucesso, pode levar até 3 minutos para aparecer na sua rede',
+  //       icon: 'check circle',
+  //     },
+  //   });
+  // }
 }
 
 export function* updateCurrentCard(data) {

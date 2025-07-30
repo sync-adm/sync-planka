@@ -229,20 +229,27 @@ module.exports = {
       },
     );
 
-    let postizIntegrationId = null;
-    if (instagramIntegration && instagramIntegration.config && instagramIntegration.config.id) {
-      postizIntegrationId = instagramIntegration.config.id;
-    }
-
     const cardAttachments = await Attachment.qm.getByCardId(card.id);
 
-    if (nextList && nextList.name && nextList.name.includes('Conclu') && postizIntegrationId) {
-      await sails.helpers.utils.handleAttachmentsForPublish(
-        cardAttachments,
-        card,
-        postizIntegrationId,
-        project.id,
-      );
+    if (
+      nextList &&
+      nextList.name &&
+      nextList.name.includes('Conclu') &&
+      instagramIntegration &&
+      instagramIntegration.config &&
+      instagramIntegration.config.id
+    ) {
+      try {
+        await sails.helpers.utils.handleAttachmentsForPublish(
+          cardAttachments,
+          card,
+          instagramIntegration,
+          project.id,
+        );
+      } catch (error) {
+        sails.log.error('Error publishing to social media:', error);
+        // Don't fail the card update if social media publishing fails
+      }
     }
 
     return {

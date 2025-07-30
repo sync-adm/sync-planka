@@ -138,6 +138,12 @@ export default {
       noIntegrationsFound: 'Nenhuma integração encontrada',
       integrationSelected: 'Integração Selecionada:',
       saveIntegration: 'Salvar Integração',
+      automaticPublishingSettings: 'Configurações de Publicação Automática',
+      enableFeedPosts: 'Habilitar Publicações no Feed',
+      enableReelsPosts: 'Habilitar Publicações de Reels',
+      enableStoryPosts: 'Habilitar Publicações no Story',
+      enabled: 'Habilitado',
+      none: 'Nenhum',
       activeIntegrations: 'Integrações Ativas',
       noActiveIntegrations: 'Nenhuma integração ativa no momento.',
       noActiveIntegrationsDescription:
