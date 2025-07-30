@@ -1,0 +1,82 @@
+:global(#app) {
+  .firstDivider {
+    margin-top: 0;
+  }
+
+  .wrapper {
+    border: none;
+    box-shadow: none;
+
+    :global(.ui.dropdown .menu > .item) {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+
+      :global(.ui.avatar.image) {
+        margin-right: 8px;
+        margin-top: 0;
+        margin-bottom: 0;
+        vertical-align: middle;
+        align-self: center;
+      }
+    }
+
+    :global(.ui.dropdown > .text) {
+      display: flex;
+      align-items: center;
+
+      :global(.ui.avatar.image) {
+        margin-right: 8px;
+        margin-top: 0;
+        margin-bottom: 0;
+        vertical-align: middle;
+        align-self: center;
+      }
+    }
+
+    :global(.ui.dropdown .ui.avatar.image) {
+      display: inline-block;
+      vertical-align: middle;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .selectedIntegration {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin: 15px 0;
+    border-left: 4px solid #28a745;
+
+    h5 {
+      margin-bottom: 10px;
+      color: #495057;
+    }
+
+    p {
+      margin-bottom: 5px;
+      color: #6c757d;
+
+      strong {
+        color: #495057;
+      }
+    }
+  }
+
+  .statusIndicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
+  .integrationCard {
+    :global(.ui.card) {
+      position: relative;
+    }
+  }
+
+}

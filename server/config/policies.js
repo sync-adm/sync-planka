@@ -27,6 +27,8 @@ module.exports.policies = {
   'access-tokens/create': true,
   'access-tokens/exchange-with-oidc': true,
 
+  'instagram-webhook/*': true,
+
   'marketing/*': ['is-authenticated', 'is-admin'],
   'design/*': ['is-authenticated', 'is-admin'],
 };

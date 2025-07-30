@@ -1,4 +1,5 @@
 import { all, call, fork, join, put, race, select, take } from 'redux-saga/effects';
+import toast from 'react-hot-toast';
 import { LOCATION_CHANGE_HANDLE } from '../../../lib/redux-router';
 
 import { goToBoard, goToCard } from './router';
@@ -9,7 +10,13 @@ import api from '../../../api';
 import { createLocalId } from '../../../utils/local-id';
 import { isListArchiveOrTrash, isListFinite } from '../../../utils/record-helpers';
 import ActionTypes from '../../../constants/ActionTypes';
+import ToastTypes from '../../../constants/ToastTypes';
 import { BoardViews, ListTypes } from '../../../constants/Enums';
+
+// Toast helper function to work with the project's toast system
+function* showToast(params) {
+  yield call(toast, params);
+}
 
 // eslint-disable-next-line no-underscore-dangle
 const _preloadImage = (url) =>
@@ -233,11 +240,27 @@ export function* handleCardCreate(card) {
 
 export function* updateCard(id, data) {
   let prevListId;
+  // const isMovingToCompletedList = false;
+
   if (data.listId) {
     const list = yield select(selectors.selectListById, data.listId);
 
     const card = yield select(selectors.selectCardById, id);
     const prevList = yield select(selectors.selectListById, card.listId);
+
+    if (list && list.name && list.name.includes('Conclu')) {
+      // isMovingToCompletedList = true;
+
+      yield call(showToast, {
+        type: ToastTypes.GENERIC_TOAST,
+        params: {
+          type: 'info',
+          title: 'Publicação iniciada',
+          message: 'Vamos publicar em suas redes sociais',
+          icon: 'share',
+        },
+      });
+    }
 
     if (prevList.type === ListTypes.TRASH) {
       prevListId = null;
@@ -266,6 +289,20 @@ export function* updateCard(id, data) {
   }
 
   yield put(actions.updateCard.success(card));
+
+  // if (isMovingToCompletedList) {
+  //   yield call(delay, 2000);
+
+  //   yield call(showToast, {
+  //     type: ToastTypes.GENERIC_TOAST,
+  //     params: {
+  //       type: 'success',
+  //       title: 'Publicação realizada',
+  //       message: 'Artes publicadas com sucesso, pode levar até 3 minutos para aparecer na sua rede',
+  //       icon: 'check circle',
+  //     },
+  //   });
+  // }
 }
 
 export function* updateCurrentCard(data) {

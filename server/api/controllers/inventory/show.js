@@ -20,25 +20,20 @@ module.exports = {
   },
 
   async fn(inputs) {
-    const BUCKET_NAME = 'sync-platforms';
-    const REGION = 'sa-east-1';
+    try {
+      const inventory = await sails.helpers.utils.fetchInventoryData(inputs.subdomain);
 
-    const url = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${inputs.subdomain}/inventory/data.json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const inventory = await res.json();
-
-    if (!inventory) {
+      return {
+        status: 200,
+        body: {
+          message: 'Inventory data for subdomain',
+          subdomain: inputs.subdomain,
+          data: inventory,
+        },
+      };
+    } catch (error) {
+      sails.log.error('Failed to fetch inventory:', error);
       throw Errors.INVENTORY_NOT_FOUND;
     }
-
-    return {
-      status: 200,
-      body: {
-        message: 'Inventory data for subdomain',
-        subdomain: inputs.subdomain,
-        data: inventory,
-      },
-    };
   },
 };

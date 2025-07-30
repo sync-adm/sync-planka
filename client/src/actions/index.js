@@ -6,6 +6,7 @@ import modals from './modals';
 import users from './users';
 import projects from './projects';
 import projectManagers from './project-managers';
+import projectIntegrations from './project-integrations';
 import backgroundImages from './background-images';
 import baseCustomFieldGroups from './base-custom-field-groups';
 import boards from './boards';
@@ -26,6 +27,7 @@ import notificationServices from './notification-services';
 import marketing from './marketing';
 import design from './design';
 import inventory from './inventory';
+import postizIntegrations from './postiz-integrations';
 
 export default {
   ...router,
@@ -36,6 +38,7 @@ export default {
   ...users,
   ...projects,
   ...projectManagers,
+  ...projectIntegrations,
   ...backgroundImages,
   ...baseCustomFieldGroups,
   ...boards,
@@ -56,4 +59,5 @@ export default {
   ...marketing,
   ...design,
   ...inventory,
+  ...postizIntegrations,
 };

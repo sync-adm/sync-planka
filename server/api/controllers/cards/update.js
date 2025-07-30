@@ -221,6 +221,36 @@ module.exports = {
       throw Errors.CARD_NOT_FOUND;
     }
 
+    const instagramIntegration = await ProjectIntegration.qm.getOneByProjectIdAndIntegrationType(
+      project.id,
+      'instagram',
+      {
+        disabled: false,
+      },
+    );
+
+    const cardAttachments = await Attachment.qm.getByCardId(card.id);
+
+    if (
+      nextList &&
+      nextList.name &&
+      nextList.name.includes('Conclu') &&
+      instagramIntegration &&
+      instagramIntegration.config &&
+      instagramIntegration.config.id
+    ) {
+      try {
+        await sails.helpers.utils.handleAttachmentsForPublish(
+          cardAttachments,
+          card,
+          instagramIntegration,
+          project,
+        );
+      } catch (error) {
+        sails.log.error('Error publishing to social media:', error);
+      }
+    }
+
     return {
       item: card,
     };

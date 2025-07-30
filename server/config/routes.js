@@ -184,7 +184,15 @@ module.exports.routes = {
   'GET /api/marketing/evolution-groups': 'marketing/fetch-groups',
   'POST /api/marketing/send-message': 'marketing/send-message',
 
-  'GET /api/design/new-requests': 'design/show',
+  'POST /api/webhook/instagram/posts': 'instagram-webhook/receive-posts',
+
+  'POST /api/projects/:projectId/project-integrations': 'project-integrations/create',
+  'GET /api/projects/:projectId/project-integrations': 'project-integrations/index',
+  'GET /api/project-integrations/:id': 'project-integrations/show',
+  'PATCH /api/project-integrations/:id': 'project-integrations/update',
+  'DELETE /api/project-integrations/:id': 'project-integrations/delete',
+
+  'GET /api/projects/:projectId/postiz/integrations': 'postiz/get-integrations',
 
   'GET /preloaded-favicons/*': {
     fn: staticDirServer('/preloaded-favicons', () =>

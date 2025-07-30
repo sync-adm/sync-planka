@@ -56,6 +56,18 @@ const createSocketEventsChannel = () =>
       emit(entryActions.handleProjectManagerDelete(item));
     };
 
+    const handleProjectIntegrationCreate = ({ item }) => {
+      emit(entryActions.handleProjectIntegrationCreate(item));
+    };
+
+    const handleProjectIntegrationUpdate = ({ item }) => {
+      emit(entryActions.handleProjectIntegrationUpdate(item));
+    };
+
+    const handleProjectIntegrationDelete = ({ item }) => {
+      emit(entryActions.handleProjectIntegrationDelete(item));
+    };
+
     const handleBackgroundImageCreate = ({ item, requestId }) => {
       emit(entryActions.handleBackgroundImageCreate(item, requestId));
     };
@@ -286,6 +298,10 @@ const createSocketEventsChannel = () =>
     socket.on('projectManagerCreate', handleProjectManagerCreate);
     socket.on('projectManagerDelete', handleProjectManagerDelete);
 
+    socket.on('projectIntegrationCreate', handleProjectIntegrationCreate);
+    socket.on('projectIntegrationUpdate', handleProjectIntegrationUpdate);
+    socket.on('projectIntegrationDelete', handleProjectIntegrationDelete);
+
     socket.on('backgroundImageCreate', handleBackgroundImageCreate);
     socket.on('backgroundImageDelete', handleBackgroundImageDelete);
 
@@ -375,6 +391,10 @@ const createSocketEventsChannel = () =>
 
       socket.off('projectManagerCreate', handleProjectManagerCreate);
       socket.off('projectManagerDelete', handleProjectManagerDelete);
+
+      socket.off('projectIntegrationCreate', handleProjectIntegrationCreate);
+      socket.off('projectIntegrationUpdate', handleProjectIntegrationUpdate);
+      socket.off('projectIntegrationDelete', handleProjectIntegrationDelete);
 
       socket.off('backgroundImageCreate', handleBackgroundImageCreate);
       socket.off('backgroundImageDelete', handleBackgroundImageDelete);

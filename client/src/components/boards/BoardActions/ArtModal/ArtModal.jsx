@@ -110,6 +110,8 @@ Parcela: ${data.installmentValue}`
 }
 
 ${vehiclePreviewUrl}
+
+${selectedVehicleData.id ? `ID: ${selectedVehicleData.id}` : ''}
 `;
 
     const payload = {
