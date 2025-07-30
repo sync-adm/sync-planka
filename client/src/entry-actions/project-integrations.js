@@ -30,9 +30,33 @@ const deleteProjectIntegration = (id) => ({
   },
 });
 
+const handleProjectIntegrationCreate = (projectIntegration) => ({
+  type: EntryActionTypes.PROJECT_INTEGRATION_CREATE_HANDLE,
+  payload: {
+    projectIntegration,
+  },
+});
+
+const handleProjectIntegrationUpdate = (projectIntegration) => ({
+  type: EntryActionTypes.PROJECT_INTEGRATION_UPDATE_HANDLE,
+  payload: {
+    projectIntegration,
+  },
+});
+
+const handleProjectIntegrationDelete = (projectIntegration) => ({
+  type: EntryActionTypes.PROJECT_INTEGRATION_DELETE_HANDLE,
+  payload: {
+    projectIntegration,
+  },
+});
+
 export default {
   createProjectIntegration,
   fetchProjectIntegrations,
   updateProjectIntegration,
   deleteProjectIntegration,
+  handleProjectIntegrationCreate,
+  handleProjectIntegrationUpdate,
+  handleProjectIntegrationDelete,
 };

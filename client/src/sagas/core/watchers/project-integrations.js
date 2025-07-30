@@ -17,5 +17,20 @@ export default function* projectIntegrationsWatchers() {
     takeEvery(EntryActionTypes.PROJECT_INTEGRATION_DELETE, ({ payload: { id } }) =>
       services.deleteProjectIntegration(id),
     ),
+    takeEvery(
+      EntryActionTypes.PROJECT_INTEGRATION_CREATE_HANDLE,
+      ({ payload: { projectIntegration } }) =>
+        services.handleProjectIntegrationCreate(projectIntegration),
+    ),
+    takeEvery(
+      EntryActionTypes.PROJECT_INTEGRATION_UPDATE_HANDLE,
+      ({ payload: { projectIntegration } }) =>
+        services.handleProjectIntegrationUpdate(projectIntegration),
+    ),
+    takeEvery(
+      EntryActionTypes.PROJECT_INTEGRATION_DELETE_HANDLE,
+      ({ payload: { projectIntegration } }) =>
+        services.handleProjectIntegrationDelete(projectIntegration),
+    ),
   ]);
 }

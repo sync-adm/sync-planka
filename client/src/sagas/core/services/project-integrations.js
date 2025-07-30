@@ -68,9 +68,24 @@ export function* deleteProjectIntegration(id) {
   }
 }
 
+export function* handleProjectIntegrationCreate(projectIntegration) {
+  yield put(actions.createProjectIntegration.success(projectIntegration));
+}
+
+export function* handleProjectIntegrationUpdate(projectIntegration) {
+  yield put(actions.updateProjectIntegration.success(projectIntegration));
+}
+
+export function* handleProjectIntegrationDelete(projectIntegration) {
+  yield put(actions.deleteProjectIntegration.success(projectIntegration));
+}
+
 export default {
   createProjectIntegration,
   fetchProjectIntegrations,
   updateProjectIntegration,
   deleteProjectIntegration,
+  handleProjectIntegrationCreate,
+  handleProjectIntegrationUpdate,
+  handleProjectIntegrationDelete,
 };
