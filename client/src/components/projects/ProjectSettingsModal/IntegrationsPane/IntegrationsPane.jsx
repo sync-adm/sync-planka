@@ -1,23 +1,15 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  Divider,
-  Form,
-  Header,
-  Tab,
-  Message,
-  Card,
-  Image,
-  Confirm,
-  Checkbox,
-} from 'semantic-ui-react';
+import { Divider, Form, Header, Tab, Message, Confirm } from 'semantic-ui-react';
 
 import selectors from '../../../../selectors';
 import entryActions from '../../../../entry-actions';
 import actions from '../../../../actions';
 import { useForm } from '../../../../hooks';
+import IntegrationSelector from './IntegrationSelector';
+import IntegrationSettings from './IntegrationSettings';
+import ActiveIntegrationsList from './ActiveIntegrationsList';
 import styles from './IntegrationsPane.module.scss';
 
 const DEFAULT_DATA = {
@@ -130,17 +122,14 @@ const IntegrationsPane = React.memo(() => {
   ]);
 
   const handleIntegrationChange = useCallback(
-    (_, { name, value }) => {
+    (name, value) => {
       setData((prev) => ({ ...prev, [name]: value }));
-      if (projectIntegrationCreateError) {
-        dispatch(actions.clearProjectIntegrationCreateError());
-      }
     },
-    [setData, projectIntegrationCreateError, dispatch],
+    [setData],
   );
 
   const handleCheckboxChange = useCallback(
-    (_, { name, checked }) => {
+    (name, checked) => {
       setData((prev) => ({ ...prev, [name]: checked }));
     },
     [setData],
@@ -167,99 +156,6 @@ const IntegrationsPane = React.memo(() => {
     [dispatch],
   );
 
-  const renderActiveIntegrations = () => {
-    if (projectIntegrationsLoading) {
-      return (
-        <Message info>
-          <Message.Header>{t('common.loading')}</Message.Header>
-          <p>{t('common.loadingActiveIntegrations')}</p>
-        </Message>
-      );
-    }
-
-    if (projectIntegrations && projectIntegrations.length > 0) {
-      return (
-        <div>
-          {projectIntegrations.map((integration) => (
-            <Card
-              key={integration.id}
-              className={styles.integrationCard}
-              fluid
-              style={{ marginBottom: '10px' }}
-            >
-              <Card.Content>
-                <Image
-                  floated="left"
-                  size="tiny"
-                  src={
-                    integration.config?.picture ||
-                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaTTEyIDEzLjVDOS4zNDUxIDEzLjUgNCAxNC44MjI1IDQgMTcuNVYyMEgyMFYxNy41QzIwIDE0LjgyMjUgMTQuNjU0OSAxMy41IDEyIDEzLjVaIiBmaWxsPSIjOTk5Ii8+Cjwvc3ZnPgo='
-                  }
-                  avatar
-                />
-                <div
-                  className={styles.statusIndicator}
-                  style={{
-                    backgroundColor: integration.disabled ? '#f2711c' : '#21ba45',
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                    top: '15px',
-                    right: '15px',
-                  }}
-                />
-                <Card.Header>
-                  {integration.config?.name || t('common.unknownIntegration')}
-                </Card.Header>
-                <Card.Meta>
-                  <span className="category">
-                    {integration.integrationType?.toUpperCase()} •{' '}
-                    {integration.config?.profile ? `@${integration.config.profile}` : ''}
-                  </span>
-                  {integration.integrationType === 'instagram' &&
-                    integration.config?.publishSettings && (
-                      <div style={{ marginTop: '8px', fontSize: '0.9em', color: '#666' }}>
-                        <strong>{t('common.enabled')}:</strong>{' '}
-                        {[
-                          integration.config.publishSettings.enableFeed && 'Feed',
-                          integration.config.publishSettings.enableReels && 'Reels',
-                          integration.config.publishSettings.enableStory && 'Story',
-                        ]
-                          .filter(Boolean)
-                          .join(', ') || t('common.none')}
-                      </div>
-                    )}
-                </Card.Meta>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button
-                    basic
-                    color={integration.disabled ? 'green' : 'orange'}
-                    onClick={() => handleToggleIntegration(integration)}
-                  >
-                    {integration.disabled ? 'Enable' : 'Disable'}
-                  </Button>
-                  <Button basic color="red" onClick={() => handleDeleteIntegration(integration)}>
-                    Delete
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-          ))}
-        </div>
-      );
-    }
-
-    return (
-      <Message info>
-        <Message.Header>{t('common.noActiveIntegrations')}</Message.Header>
-        <p>{t('common.noActiveIntegrationsDescription')}</p>
-      </Message>
-    );
-  };
-
   return (
     <Tab.Pane attached={false} className={styles.wrapper}>
       <Divider horizontal className={styles.firstDivider}>
@@ -278,90 +174,22 @@ const IntegrationsPane = React.memo(() => {
       )}
 
       <Form>
-        <Form.Dropdown
-          fluid
-          search
-          selection
+        <IntegrationSelector
           loading={postizIntegrationsIsFetching}
-          label={t('common.selectPostizIntegration')}
-          name="selectedIntegration"
           value={data.selectedIntegration}
-          onChange={handleIntegrationChange}
           options={integrationOptions}
-          placeholder={
-            postizIntegrationsIsFetching
-              ? t('common.loadingIntegrations')
-              : t('common.searchIntegration')
-          }
-          clearable
-          noResultsMessage={t('common.noIntegrationsFound')}
+          error={projectIntegrationCreateError}
           disabled={postizIntegrationsIsFetching || integrationOptions.length === 0}
+          onChange={handleIntegrationChange}
         />
 
-        {projectIntegrationCreateError && (
-          <Message negative style={{ marginTop: '10px' }}>
-            <Message.Header>{t('common.error')}</Message.Header>
-            <p>
-              {projectIntegrationCreateError.message ===
-              'Integration already exists for this project'
-                ? t('common.integrationAlreadyExists')
-                : projectIntegrationCreateError.message || t('common.errorCreatingIntegration')}
-            </p>
-          </Message>
-        )}
-
-        {selectedIntegrationData && (
-          <div className={styles.selectedIntegration}>
-            <Header as="h5">{t('common.integrationSelected')}</Header>
-            <p>
-              <strong>{t('common.name')}:</strong> {selectedIntegrationData.text}
-            </p>
-            {selectedIntegrationData.description && (
-              <p>
-                <strong>{t('common.description')}:</strong> {selectedIntegrationData.description}
-              </p>
-            )}
-
-            {selectedIntegrationData.label === 'instagram' && (
-              <div style={{ marginTop: '15px' }}>
-                <Header as="h6">{t('common.automaticPublishingSettings')}</Header>
-                <Form.Field>
-                  <Checkbox
-                    name="enableFeed"
-                    label={t('common.enableFeedPosts')}
-                    checked={data.enableFeed}
-                    onChange={handleCheckboxChange}
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Checkbox
-                    name="enableReels"
-                    label={t('common.enableReelsPosts')}
-                    checked={data.enableReels}
-                    onChange={handleCheckboxChange}
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <Checkbox
-                    name="enableStory"
-                    label={t('common.enableStoryPosts')}
-                    checked={data.enableStory}
-                    onChange={handleCheckboxChange}
-                  />
-                </Form.Field>
-              </div>
-            )}
-          </div>
-        )}
-
-        <Form.Field style={{ textAlign: 'right', marginTop: '20px' }}>
-          <Button
-            positive
-            content={t('common.saveIntegration')}
-            disabled={!selectedIntegrationData || postizIntegrationsIsFetching}
-            onClick={handleSave}
-          />
-        </Form.Field>
+        <IntegrationSettings
+          selectedIntegration={selectedIntegrationData}
+          data={data}
+          disabled={!selectedIntegrationData || postizIntegrationsIsFetching}
+          onCheckboxChange={handleCheckboxChange}
+          onSave={handleSave}
+        />
       </Form>
 
       <Divider horizontal>
@@ -369,14 +197,13 @@ const IntegrationsPane = React.memo(() => {
       </Divider>
 
       <div className={styles.activeIntegrations}>
-        {projectIntegrationsError && (
-          <Message negative>
-            <Message.Header>{t('common.error')}</Message.Header>
-            <p>{projectIntegrationsError.message || t('common.errorLoadingActiveIntegrations')}</p>
-          </Message>
-        )}
-
-        {renderActiveIntegrations()}
+        <ActiveIntegrationsList
+          integrations={projectIntegrations}
+          loading={projectIntegrationsLoading}
+          error={projectIntegrationsError}
+          onToggleIntegration={handleToggleIntegration}
+          onDeleteIntegration={handleDeleteIntegration}
+        />
       </div>
 
       <Confirm
