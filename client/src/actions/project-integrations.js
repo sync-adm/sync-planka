@@ -86,9 +86,14 @@ deleteProjectIntegration.failure = (error) => ({
   },
 });
 
+const clearProjectIntegrationCreateError = () => ({
+  type: ActionTypes.PROJECT_INTEGRATION_CREATE_ERROR_CLEAR,
+});
+
 export default {
   createProjectIntegration,
   fetchProjectIntegrations,
   updateProjectIntegration,
   deleteProjectIntegration,
+  clearProjectIntegrationCreateError,
 };

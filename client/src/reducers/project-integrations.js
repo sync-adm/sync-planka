@@ -4,6 +4,7 @@ const initialState = {
   items: [],
   isLoading: false,
   error: null,
+  createError: null,
 };
 
 // eslint-disable-next-line default-param-last
@@ -28,10 +29,26 @@ export default function projectIntegrationsReducer(state = initialState, action)
         isLoading: false,
         error: action.payload.error,
       };
+    case ActionTypes.PROJECT_INTEGRATION_CREATE:
+      return {
+        ...state,
+        createError: null,
+      };
     case ActionTypes.PROJECT_INTEGRATION_CREATE__SUCCESS:
       return {
         ...state,
         items: [...state.items, action.payload.projectIntegration],
+        createError: null,
+      };
+    case ActionTypes.PROJECT_INTEGRATION_CREATE__FAILURE:
+      return {
+        ...state,
+        createError: action.payload.error,
+      };
+    case ActionTypes.PROJECT_INTEGRATION_CREATE_ERROR_CLEAR:
+      return {
+        ...state,
+        createError: null,
       };
     case ActionTypes.PROJECT_INTEGRATION_UPDATE__SUCCESS:
       return {

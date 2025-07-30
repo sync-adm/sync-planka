@@ -15,6 +15,7 @@ import {
 
 import selectors from '../../../../selectors';
 import entryActions from '../../../../entry-actions';
+import actions from '../../../../actions';
 import { useForm } from '../../../../hooks';
 import styles from './IntegrationsPane.module.scss';
 
@@ -44,6 +45,7 @@ const IntegrationsPane = React.memo(() => {
   const projectIntegrations = useSelector(selectors.selectProjectIntegrations);
   const projectIntegrationsLoading = useSelector(selectors.selectIsProjectIntegrationsLoading);
   const projectIntegrationsError = useSelector(selectors.selectProjectIntegrationsError);
+  const projectIntegrationCreateError = useSelector(selectors.selectProjectIntegrationCreateError);
 
   useEffect(() => {
     if (project?.id) {
@@ -89,6 +91,11 @@ const IntegrationsPane = React.memo(() => {
       return;
     }
 
+    // Limpar erro anterior antes de tentar criar
+    if (projectIntegrationCreateError) {
+      dispatch(actions.clearProjectIntegrationCreateError());
+    }
+
     const integration = postizIntegrations.find((i) => i.id === selectedIntegrationData.value);
 
     const integrationData = {
@@ -102,13 +109,24 @@ const IntegrationsPane = React.memo(() => {
     dispatch(entryActions.createProjectIntegration(currentProject?.id, integrationData));
 
     setData(DEFAULT_DATA);
-  }, [selectedIntegrationData, postizIntegrations, dispatch, currentProject?.id, setData]);
+  }, [
+    selectedIntegrationData,
+    postizIntegrations,
+    dispatch,
+    currentProject?.id,
+    setData,
+    projectIntegrationCreateError,
+  ]);
 
   const handleIntegrationChange = useCallback(
     (_, { name, value }) => {
       setData((prev) => ({ ...prev, [name]: value }));
+      // Limpar erro de criação quando o usuário muda a seleção
+      if (projectIntegrationCreateError) {
+        dispatch(actions.clearProjectIntegrationCreateError());
+      }
     },
-    [setData],
+    [setData, projectIntegrationCreateError, dispatch],
   );
 
   const handleDeleteIntegration = useCallback((integration) => {
@@ -249,6 +267,18 @@ const IntegrationsPane = React.memo(() => {
           noResultsMessage={t('common.noIntegrationsFound')}
           disabled={postizIntegrationsIsFetching || integrationOptions.length === 0}
         />
+
+        {projectIntegrationCreateError && (
+          <Message negative style={{ marginTop: '10px' }}>
+            <Message.Header>{t('common.error')}</Message.Header>
+            <p>
+              {projectIntegrationCreateError.message ===
+              'Integration already exists for this project'
+                ? t('common.integrationAlreadyExists')
+                : projectIntegrationCreateError.message || t('common.errorCreatingIntegration')}
+            </p>
+          </Message>
+        )}
 
         {selectedIntegrationData && (
           <div className={styles.selectedIntegration}>

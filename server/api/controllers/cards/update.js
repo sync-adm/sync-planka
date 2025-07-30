@@ -236,7 +236,7 @@ module.exports = {
 
     const cardAttachments = await Attachment.qm.getByCardId(card.id);
 
-    if (nextList.name.includes('Conclu') && postizIntegrationId) {
+    if (nextList && nextList.name && nextList.name.includes('Conclu') && postizIntegrationId) {
       await sails.helpers.utils.handleAttachmentsForPublish(
         cardAttachments,
         card,

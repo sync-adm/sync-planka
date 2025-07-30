@@ -8,9 +8,13 @@ export const selectIsProjectIntegrationsLoading = (state) =>
 export const selectProjectIntegrationsError = (state) =>
   selectProjectIntegrationsState(state).error;
 
+export const selectProjectIntegrationCreateError = (state) =>
+  selectProjectIntegrationsState(state).createError;
+
 export default {
   selectProjectIntegrations,
   selectIsProjectIntegrationsLoading,
   selectProjectIntegrationsError,
+  selectProjectIntegrationCreateError,
   selectProjectIntegrationsState,
 };

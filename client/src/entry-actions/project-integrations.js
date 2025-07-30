@@ -51,6 +51,10 @@ const handleProjectIntegrationDelete = (projectIntegration) => ({
   },
 });
 
+const clearProjectIntegrationCreateError = () => ({
+  type: EntryActionTypes.PROJECT_INTEGRATION_CREATE_ERROR_CLEAR,
+});
+
 export default {
   createProjectIntegration,
   fetchProjectIntegrations,
@@ -59,4 +63,5 @@ export default {
   handleProjectIntegrationCreate,
   handleProjectIntegrationUpdate,
   handleProjectIntegrationDelete,
+  clearProjectIntegrationCreateError,
 };

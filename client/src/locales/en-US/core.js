@@ -253,6 +253,8 @@ export default {
       publishingCompleted: 'Publishing Completed',
       publishingCompletedMessage:
         'Arts published successfully, it may take up to 3 minutes to appear on your network',
+      integrationAlreadyExists: 'An integration for this social network already exists',
+      errorCreatingIntegration: 'Error creating integration',
       enable: 'Enable',
       disable: 'Disable',
       loading: 'Loading',

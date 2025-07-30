@@ -156,6 +156,8 @@ export default {
       publishingCompleted: 'Publicação Realizada',
       publishingCompletedMessage:
         'Artes publicadas com sucesso, pode levar até 3 minutos para aparecer na sua rede',
+      integrationAlreadyExists: 'Já existe uma integração para esta rede social',
+      errorCreatingIntegration: 'Erro ao criar integração',
       enable: 'Ativar',
       disable: 'Desativar',
       loading: 'Carregando',

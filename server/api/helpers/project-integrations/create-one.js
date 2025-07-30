@@ -21,6 +21,10 @@ module.exports = {
     },
   },
 
+  exits: {
+    integrationAlreadyExists: {},
+  },
+
   async fn(inputs) {
     const { values, projectId, actorUser, request } = inputs;
 
@@ -39,9 +43,7 @@ module.exports = {
     });
 
     if (existingIntegration) {
-      throw new Error(
-        `Integration of type '${values.integrationType}' already exists for this project`,
-      );
+      throw 'integrationAlreadyExists';
     }
 
     const projectIntegration = await ProjectIntegration.create({
