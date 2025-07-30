@@ -151,6 +151,11 @@ export default {
       deleteIntegration: 'Excluir Integração',
       deleteIntegrationConfirmation:
         'Tem certeza de que deseja excluir a integração "{{name}}"? Esta ação não pode ser desfeita.',
+      publishingStarted: 'Publicação Iniciada',
+      publishingStartedMessage: 'Vamos publicar em suas redes sociais',
+      publishingCompleted: 'Publicação Realizada',
+      publishingCompletedMessage:
+        'Artes publicadas com sucesso, pode levar até 3 minutos para aparecer na sua rede',
       enable: 'Ativar',
       disable: 'Desativar',
       loading: 'Carregando',

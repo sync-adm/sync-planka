@@ -15,6 +15,11 @@ module.exports = {
       description: 'Postiz integration ID to use for publishing',
       required: true,
     },
+    projectId: {
+      type: 'string',
+      description: 'Project ID for logging purposes',
+      required: true,
+    },
   },
 
   exits: {
@@ -26,7 +31,7 @@ module.exports = {
   sync: false,
 
   async fn(inputs) {
-    const { card, postizIntegrationId } = inputs;
+    const { card, postizIntegrationId, projectId } = inputs;
 
     const cardNameWithoutPlate = sails.helpers.utils.formatVehicleName(card.name);
 
@@ -36,7 +41,7 @@ module.exports = {
     const results = [];
 
     if (!postizIntegrationId) {
-      sails.log.warn('No Postiz integration ID found for project:', project.id);
+      sails.log.warn('No Postiz integration ID found for project:', projectId);
       return { success: false, error: 'No integration configured' };
     }
 

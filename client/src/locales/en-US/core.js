@@ -248,6 +248,11 @@ export default {
       deleteIntegration: 'Delete Integration',
       deleteIntegrationConfirmation:
         'Are you sure you want to delete the integration "{{name}}"? This action cannot be undone.',
+      publishingStarted: 'Publishing Started',
+      publishingStartedMessage: 'We are publishing to your social networks',
+      publishingCompleted: 'Publishing Completed',
+      publishingCompletedMessage:
+        'Arts published successfully, it may take up to 3 minutes to appear on your network',
       enable: 'Enable',
       disable: 'Disable',
       loading: 'Loading',

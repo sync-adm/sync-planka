@@ -24,7 +24,7 @@ module.exports = {
         attachment.type === Attachment.Types.FILE &&
         attachment.data &&
         attachment.data.image &&
-        attachment.data.image.height <= instagramFeedHeight,
+        attachment.data.image.height === instagramFeedHeight,
     );
 
     const instagramStoryAttachment = inputs.attachments.find(
@@ -32,7 +32,7 @@ module.exports = {
         attachment.type === Attachment.Types.FILE &&
         attachment.data &&
         attachment.data.image &&
-        attachment.data.image.height <= instagramReelsAndStoryHeight,
+        attachment.data.image.height === instagramReelsAndStoryHeight,
     );
 
     return {

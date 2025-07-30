@@ -221,15 +221,27 @@ module.exports = {
       throw Errors.CARD_NOT_FOUND;
     }
 
-    const postizIntegrationId = project.whatsappTarget; // TODO: Adicionar campo expecifico no DB, estou usando o whatsappTarget apenas para testes
+    const instagramIntegration = await ProjectIntegration.qm.getOneByProjectIdAndIntegrationType(
+      project.id,
+      'instagram',
+      {
+        disabled: false,
+      },
+    );
+
+    let postizIntegrationId = null;
+    if (instagramIntegration && instagramIntegration.config && instagramIntegration.config.id) {
+      postizIntegrationId = instagramIntegration.config.id;
+    }
 
     const cardAttachments = await Attachment.qm.getByCardId(card.id);
 
-    if (nextList.name.includes('Conclu')) {
+    if (nextList.name.includes('Conclu') && postizIntegrationId) {
       await sails.helpers.utils.handleAttachmentsForPublish(
         cardAttachments,
         card,
         postizIntegrationId,
+        project.id,
       );
     }
 
