@@ -5,6 +5,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid, Icon } from 'semantic-ui-react';
 import { useDidUpdate } from '../../../lib/hooks';
+import { push } from '../../../lib/redux-router';
 
 import selectors from '../../../selectors';
 import entryActions from '../../../entry-actions';
@@ -40,7 +41,7 @@ import AddCustomFieldGroupStep from '../../custom-field-groups/AddCustomFieldGro
 
 import styles from './ProjectContent.module.scss';
 
-const ProjectContent = React.memo(({ onClose }) => {
+const ProjectContent = React.memo(({ onClose, navigationState }) => {
   const selectListById = useMemo(() => selectors.makeSelectListById(), []);
   const selectPrevListById = useMemo(() => selectors.makeSelectListById(), []);
 
@@ -263,6 +264,15 @@ const ProjectContent = React.memo(({ onClose }) => {
       dispatch(entryActions.addCurrentUserToCurrentCard());
     }
   }, [isJoined, dispatch]);
+
+  const handleBackClick = useCallback(() => {
+    const referrer = document.referrer || '';
+    if (referrer.includes('/marketing') || referrer.includes('/design')) {
+      window.close();
+    } else {
+      dispatch(push(`/boards/${card.boardId}`));
+    }
+  }, [dispatch, card.boardId]);
 
   const handleToggleSubscriptionClick = useCallback(() => {
     dispatch(
@@ -577,6 +587,19 @@ const ProjectContent = React.memo(({ onClose }) => {
                 )}
               </div>
             </div>
+            {navigationState?.showBackButton && (
+              <div className={styles.actions}>
+                <span className={styles.actionsTitle}>NAVEGAÇÃO</span>
+                <Button
+                  fluid
+                  className={classNames(styles.actionButton, styles.hidable)}
+                  onClick={handleBackClick}
+                >
+                  <Icon name="arrow left" className={styles.actionIcon} />
+                  Voltar
+                </Button>
+              </div>
+            )}
             {(canEditDueDate ||
               canEditStopwatch ||
               canUseMembers ||
@@ -799,6 +822,14 @@ const ProjectContent = React.memo(({ onClose }) => {
 
 ProjectContent.propTypes = {
   onClose: PropTypes.func.isRequired,
+  navigationState: PropTypes.shape({
+    from: PropTypes.string,
+    showBackButton: PropTypes.bool,
+  }),
+};
+
+ProjectContent.defaultProps = {
+  navigationState: null,
 };
 
 export default ProjectContent;
