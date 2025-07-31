@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader, Table, Pagination } from 'semantic-ui-react';
-import { push } from '../../../lib/redux-router';
 
 import styles from './Marketing.module.scss';
 import Fixed from '../Fixed';
@@ -34,7 +33,8 @@ const Content = React.memo(() => {
   };
 
   const handleClickItem = (card) => {
-    dispatch(push(Paths.CARDS.replace(':id', card.id)));
+    const cardUrl = Paths.CARDS.replace(':id', card.id);
+    window.open(cardUrl, '_blank');
   };
 
   return (

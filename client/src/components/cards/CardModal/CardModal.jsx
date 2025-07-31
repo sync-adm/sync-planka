@@ -45,6 +45,24 @@ const CardModal = React.memo(() => {
 
   const [ClosableModal, isClosableActiveRef] = useClosableModal();
 
+  const navigationState = useMemo(() => {
+    const referrer = document.referrer || '';
+    const isFromMarketing = referrer.includes('/marketing');
+    const isFromDesign = referrer.includes('/design');
+
+    let from = null;
+    if (isFromMarketing) {
+      from = '/marketing';
+    } else if (isFromDesign) {
+      from = '/design';
+    }
+
+    return {
+      from,
+      showBackButton: isFromMarketing || isFromDesign,
+    };
+  }, []);
+
   useEffect(() => {
     const handleKeydown = (event) => {
       if (isClosableActiveRef.current) {
@@ -92,10 +110,10 @@ const CardModal = React.memo(() => {
     >
       {canEdit ? (
         <AddAttachmentZone>
-          <Content onClose={handleClose} />
+          <Content onClose={handleClose} navigationState={navigationState} />
         </AddAttachmentZone>
       ) : (
-        <Content onClose={handleClose} />
+        <Content onClose={handleClose} navigationState={navigationState} />
       )}
     </ClosableModal>
   );
