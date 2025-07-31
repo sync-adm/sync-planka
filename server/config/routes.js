@@ -180,6 +180,8 @@ module.exports.routes = {
   'POST /api/notification-services/:id/test': 'notification-services/test',
   'DELETE /api/notification-services/:id': 'notification-services/delete',
 
+  'GET /api/design/new-requests': 'design/show',
+
   'GET /api/marketing/completed-requests': 'marketing/show',
   'GET /api/marketing/evolution-groups': 'marketing/fetch-groups',
   'POST /api/marketing/send-message': 'marketing/send-message',

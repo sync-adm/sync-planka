@@ -27,16 +27,19 @@
   }
 
   .dateColumn {
-    max-width: 80px;
+    max-width: 120px;
+    white-space: nowrap;
   }
 
   .waitTimeColumn {
-    max-width: 80px;
+    max-width: 120px;
+    white-space: nowrap;
   }
 
   .requestColumn {
     min-width: 250px;
     width: auto;
+    white-space: nowrap;
   }
 }
 

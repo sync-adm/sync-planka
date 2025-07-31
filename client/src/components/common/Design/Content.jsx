@@ -40,7 +40,7 @@ const Content = React.memo(() => {
     <div className={styles.content}>
       <Fixed />
       <div className={styles.container}>
-        <h1>Solicitações Novas</h1>
+        <h1>Novas Solicitações</h1>
         {isFetching ? (
           <Loader active />
         ) : (
