@@ -35,7 +35,7 @@ module.exports = {
   async fn(inputs, exits) {
     const page = Math.max(1, inputs.page || 1);
     const limit = Math.max(1, Math.min(100, inputs.limit || 20));
-    const listNameContains = inputs.listNameContains || 'Conclu';
+    const listNameContains = inputs.listNameContains || 'Solici';
     const includeAllFields = inputs.includeAllFields || false;
 
     const response = await sails.helpers.syncInternal.findCardsByListName(
