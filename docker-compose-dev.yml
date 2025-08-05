@@ -18,6 +18,8 @@ services:
       - EVOLUTION_INSTANCE=Marketing
       - EVOLUTION_API_KEY=26115CD7A8CF-436A-A215-A848F368DCDE
       - EVOLUTION_BASE_ADDRESS=https://evolution-api.sync.com.br
+      - POSTIZ_BASE_ADDRESS=https://postiz.sync.dev.br
+      - POSTIZ_API_KEY=f85d15a766a2a8250bf5ac39394e85ae26c5a32b3a3aac7778c13a329013aed6
 
       # - LOG_LEVEL=warn
 

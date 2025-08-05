@@ -79,6 +79,7 @@ module.exports = {
       }
 
       const result = await response.json();
+
       return { success: true, data: result };
     } catch (error) {
       sails.log.error('Erro ao postar no Postiz:', error);
