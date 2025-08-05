@@ -27,9 +27,9 @@ module.exports = {
       return null;
     }
 
-    const STORJ_ENDPOINT = 'https://link.storjshare.io/s/jxtj5fknleuwxtn5w4iriuuxcena';
+    const STORJ_ENDPOINT = 'https://link.storjshare.io/raw/jxtj5fknleuwxtn5w4iriuuxcena';
     const S3_BUCKET = 'planka-marketing';
 
-    return `${STORJ_ENDPOINT}/${S3_BUCKET}/private/attachments/${attachment.data.fileReferenceId}/${attachment.data.filename}?wrap=0`;
+    return `${STORJ_ENDPOINT}/${S3_BUCKET}/private/attachments/${attachment.data.fileReferenceId}/${attachment.data.filename}`;
   },
 };

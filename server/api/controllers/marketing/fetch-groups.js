@@ -1,6 +1,3 @@
-const https = require('https');
-const { URL } = require('url');
-
 module.exports = {
   friendlyName: 'Fetch Evolution API Groups',
 
@@ -28,7 +25,6 @@ module.exports = {
 
   fn: async function fetchGroups(inputs, exits) {
     try {
-      // Verificar se as variáveis de ambiente estão configuradas
       const evolutionInstance = process.env.EVOLUTION_INSTANCE;
       const evolutionApiKey = process.env.EVOLUTION_API_KEY;
       const evolutionBaseAddress = process.env.EVOLUTION_BASE_ADDRESS;
@@ -44,82 +40,51 @@ module.exports = {
         });
       }
 
-      // Montar a URL da API
       const urlString = `${evolutionBaseAddress}/group/fetchAllGroups/${evolutionInstance}?getParticipants=${inputs.getParticipants}`;
-      const url = new URL(urlString);
 
       sails.log.info(`Buscando grupos da Evolution API: ${urlString}`);
 
-      // Fazer a requisição usando https nativo
-      const responseData = await new Promise((resolve, reject) => {
-        const options = {
-          hostname: url.hostname,
-          port: url.port || 443,
-          path: url.pathname + url.search,
-          method: 'GET',
-          headers: {
-            apikey: evolutionApiKey,
-            'Content-Type': 'application/json',
-          },
-          timeout: 30000,
-        };
-
-        const req = https.request(options, (res) => {
-          let data = '';
-
-          res.on('data', (chunk) => {
-            data += chunk;
-          });
-
-          res.on('end', () => {
-            try {
-              if (res.statusCode >= 200 && res.statusCode < 300) {
-                resolve({
-                  data: JSON.parse(data),
-                  statusCode: res.statusCode,
-                });
-              } else {
-                const errorObj = new Error(`HTTP Error: ${res.statusCode}`);
-                errorObj.response = {
-                  status: res.statusCode,
-                  data: JSON.parse(data),
-                };
-                reject(errorObj);
-              }
-            } catch (parseError) {
-              const errorObj = new Error(`Parse Error: ${parseError.message}`);
-              errorObj.response = {
-                status: res.statusCode,
-                data,
-              };
-              reject(errorObj);
-            }
-          });
-        });
-
-        req.on('error', (error) => {
-          reject(error);
-        });
-
-        req.on('timeout', () => {
-          req.destroy();
-          reject(new Error('Request timeout'));
-        });
-
-        req.end();
+      const response = await fetch(urlString, {
+        method: 'GET',
+        headers: {
+          apikey: evolutionApiKey,
+          'Content-Type': 'application/json',
+        },
+        signal: AbortSignal.timeout(30000),
       });
 
-      sails.log.info(`Grupos encontrados: ${responseData.data ? responseData.data.length : 0}`);
+      if (!response.ok) {
+        const errorData = await response.text();
+        let parsedErrorData;
+
+        try {
+          parsedErrorData = JSON.parse(errorData);
+        } catch (e) {
+          parsedErrorData = errorData;
+        }
+
+        const errorObj = new Error(`HTTP Error: ${response.status}`);
+        errorObj.response = {
+          status: response.status,
+          data: parsedErrorData,
+        };
+        throw errorObj;
+      }
+
+      const responseData = await response.json();
+
+      sails.log.info(`Grupos encontrados: ${responseData ? responseData.length : 0}`);
 
       return exits.success({
-        groups: responseData.data || [],
-        total: responseData.data ? responseData.data.length : 0,
+        groups: responseData || [],
+        total: responseData ? responseData.length : 0,
         instance: evolutionInstance,
       });
     } catch (error) {
       sails.log.error('Erro ao buscar grupos da Evolution API:', error);
 
       if (
+        error.name === 'AbortError' ||
         error.code === 'ECONNREFUSED' ||
         error.code === 'ETIMEDOUT' ||
         error.message === 'Request timeout'
