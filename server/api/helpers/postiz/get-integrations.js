@@ -34,8 +34,8 @@ module.exports = {
       throw new Error('Project not found');
     }
 
-    const postizBaseUrl = 'https://postiz-marketing.sync.dev.br';
-    const postizToken = '9aeb6cd31417e4dd6c2db54d3f206c247ada36228249bc8c502c5a4ca1fd527d';
+    const postizBaseUrl = process.env.POSTIZ_BASE_ADDRESS;
+    const postizToken = process.env.POSTIZ_API_KEY;
 
     try {
       const response = await fetch(`${postizBaseUrl}/api/public/v1/integrations`, {

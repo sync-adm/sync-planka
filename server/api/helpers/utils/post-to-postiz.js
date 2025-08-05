@@ -32,8 +32,8 @@ module.exports = {
   sync: false,
 
   async fn(inputs) {
-    const postizApiKey = '9aeb6cd31417e4dd6c2db54d3f206c247ada36228249bc8c502c5a4ca1fd527d';
-    const postizApiUrl = 'https://postiz-marketing.sync.dev.br/api/public/v1/posts';
+    const postizApiKey = process.env.POSTIZ_API_KEY;
+    const postizApiUrl = `${process.env.POSTIZ_BASE_ADDRESS}/api/public/v1/posts`;
 
     const payload = {
       type: 'now',
