@@ -11,6 +11,7 @@ import marketing from './marketing';
 import design from './design';
 import inventory from './inventory';
 import postizIntegrations from './postiz-integrations';
+import postizPosts from './postiz-posts';
 import projectIntegrations from './project-integrations';
 
 export default combineReducers({
@@ -25,5 +26,6 @@ export default combineReducers({
   design,
   inventory,
   postizIntegrations,
+  postizPosts,
   projectIntegrations,
 });
