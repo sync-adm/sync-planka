@@ -47,7 +47,7 @@ services:
 
       # Set to true to show more detailed authentication error messages.
       # It should not be enabled without a rate limiter for security reasons.
-      # - SHOW_DETAILED_AUTH_ERRORS=false
+      - SHOW_DETAILED_AUTH_ERRORS=false
 
       - S3_ENDPOINT=https://gateway.storjshare.io
       - S3_REGION=US1
@@ -56,23 +56,23 @@ services:
       - S3_BUCKET=planka-marketing
       - S3_FORCE_PATH_STYLE=true
 
-      # - OIDC_ISSUER=
-      # - OIDC_CLIENT_ID=
-      # - OIDC_CLIENT_SECRET=
-      # - OIDC_ID_TOKEN_SIGNED_RESPONSE_ALG=
-      # - OIDC_USERINFO_SIGNED_RESPONSE_ALG=
-      # - OIDC_SCOPES=openid email profile
-      # - OIDC_RESPONSE_MODE=fragment
-      # - OIDC_USE_DEFAULT_RESPONSE_MODE=true
-      # - OIDC_ADMIN_ROLES=admin
-      # - OIDC_CLAIMS_SOURCE=userinfo
-      # - OIDC_EMAIL_ATTRIBUTE=email
-      # - OIDC_NAME_ATTRIBUTE=name
-      # - OIDC_USERNAME_ATTRIBUTE=preferred_username
-      # - OIDC_ROLES_ATTRIBUTE=groups
-      # - OIDC_IGNORE_USERNAME=true
-      # - OIDC_IGNORE_ROLES=true
-      # - OIDC_ENFORCED=true
+      - OIDC_ISSUER=https://sync-login-dev.us.auth0.com/
+      - OIDC_CLIENT_ID=h12Y9Op3FwJYHCa8EDetIhPOAmVtmv8B
+      - OIDC_CLIENT_SECRET=3kephuz-TvXZoyCGQpThowxl4TcA5OeKiqerljjhesHl8earNJpuYuBTEkv-yQwh
+      - OIDC_ID_TOKEN_SIGNED_RESPONSE_ALG=RS256
+      - OIDC_USERINFO_SIGNED_RESPONSE_ALG=RS256
+      - OIDC_SCOPES=openid email profile
+      - OIDC_RESPONSE_MODE=fragment
+      - OIDC_USE_DEFAULT_RESPONSE_MODE=true
+      - OIDC_ADMIN_ROLES=admin
+      - OIDC_CLAIMS_SOURCE=id_token
+      - OIDC_EMAIL_ATTRIBUTE=email
+      - OIDC_NAME_ATTRIBUTE=name
+      - OIDC_USERNAME_ATTRIBUTE=preferred_username
+      - OIDC_ROLES_ATTRIBUTE=groups
+      - OIDC_IGNORE_USERNAME=true
+      - OIDC_IGNORE_ROLES=true
+      - OIDC_ENFORCED=true
 
       # Email Notifications (https://nodemailer.com/smtp/)
       # - SMTP_HOST=
