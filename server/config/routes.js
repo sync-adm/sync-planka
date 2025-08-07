@@ -195,6 +195,7 @@ module.exports.routes = {
   'DELETE /api/project-integrations/:id': 'project-integrations/delete',
 
   'GET /api/projects/:projectId/postiz/integrations': 'postiz/get-integrations',
+  'GET /api/projects/:projectId/postiz/posts/:provider': 'postiz/get-posts',
 
   'GET /preloaded-favicons/*': {
     fn: staticDirServer('/preloaded-favicons', () =>

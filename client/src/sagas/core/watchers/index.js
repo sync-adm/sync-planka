@@ -27,6 +27,7 @@ import marketingWatchers from './marketing';
 import designWatchers from './design';
 import inventoryWatchers from './inventory';
 import postizIntegrationsWatchers from './postiz-integrations';
+import postizPostsWatchers from './postiz-posts';
 
 export default [
   router,
@@ -58,4 +59,5 @@ export default [
   designWatchers,
   inventoryWatchers,
   postizIntegrationsWatchers,
+  postizPostsWatchers,
 ];

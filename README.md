@@ -3,7 +3,7 @@
 </br>
 </br>
 
-# Como ambiente de DEV com docker
+# Como rodar ambiente de DEV com docker
 
 Na raiz do repositório executar o seguinte comando docker:
 

@@ -28,6 +28,7 @@ import marketing from './marketing';
 import design from './design';
 import inventory from './inventory';
 import postizIntegrations from './postiz-integrations';
+import postizPosts from './postiz-posts';
 
 export default {
   ...router,
@@ -60,4 +61,5 @@ export default {
   ...design,
   ...inventory,
   ...postizIntegrations,
+  ...postizPosts,
 };
