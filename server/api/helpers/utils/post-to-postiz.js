@@ -33,7 +33,8 @@ module.exports = {
 
   async fn(inputs) {
     const postizApiKey = process.env.POSTIZ_API_KEY;
-    const postizApiUrl = `${process.env.POSTIZ_BASE_ADDRESS}/api/public/v1/posts`;
+    // const postizApiUrl = `${process.env.POSTIZ_BASE_ADDRESS}/api/public/v1/posts`;
+    const teste = 'https://n8n.sync.com.br/webhook/5159895e-c5ed-40c6-8c24-841b9f459837';
 
     const payload = {
       type: 'now',
@@ -65,7 +66,7 @@ module.exports = {
     };
 
     try {
-      const response = await fetch(postizApiUrl, {
+      const response = await fetch(teste, {
         method: 'POST',
         headers: {
           Authorization: postizApiKey,
